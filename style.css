@@ -1,0 +1,312 @@
+/* The main style sheet for SPP */
+
+@font-face {
+  font-family: "Roboto";
+  src: url("font/Roboto-Regular.ttf");
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto" , sans-serif;
+}
+
+body {
+  background-color: darkgray;
+}
+
+.console {
+  position: fixed;
+  width: 500px;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 100;
+  background-color: lightgray;
+  transition: all 300ms ease-in-out;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.is-closed {
+  transform: translateX(calc( -1 * 100% + 26px ));
+}
+
+
+#consolebar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 100vh;
+  background-color: #647c8c;
+
+}
+
+.console-button {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  width: 25px;
+  height: 25px;
+  background-color: lightgray;
+  overflow: hidden;
+  border: solid 2px white;
+  border-radius: 50%;
+  cursor: pointer;
+  transform-origin: center center;
+}
+
+.console-button:hover {
+  background-color: #ffa800;
+}
+
+.rotated {
+  transform: rotate(180deg);
+}
+
+#consolemain {
+  display: block;
+  padding: 40px 10px;
+
+}
+
+#consolemain textarea {
+  display: block;
+  width: 100%;
+  height: 65%;
+  border: none;
+  padding: 20px;
+}
+
+#consolemain h3 {
+  display: block;
+  position: relative;
+  width: 100%;
+  padding: 10px 10px;
+  text-align: center;
+  background-color: lightgray;
+  color: white;
+  margin-top: 30px;
+}
+
+.console-btn {
+  position: relative;
+  width: 100%;
+  padding: 10px 10px;
+  border: none;
+  margin-top: 5px;
+  transition: all 200ms ease;
+  background-color: darkgray;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.console-btn:hover {
+  background-color: #ffa800;
+}
+
+#files {
+  position: absolute;
+  display: block;
+  width: 100%;
+  height: 36px;
+  z-index: 3;
+  opacity: 0;
+  cursor: pointer;
+}
+
+#dummyload {
+  position: absolute;
+  margin-top: 0px;
+
+}
+
+#dummyload-div {
+  position: relative;
+  display: block;
+  height: 41px;
+}
+
+.page  {
+  display: block;
+  position: relative;
+  top: 0;
+  left: 0;
+  padding-left: 26px;
+  z-index: 9;
+  /* height: 100%; */
+
+  width: calc( 100vw - 10px);
+  background-color: #647c8c;
+}
+
+header {
+  position: relative;
+  width: auto;
+  min-height: 75px;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  color: white;
+
+}
+
+header div {
+  margin-right: 30px;
+}
+
+header button {
+  margin-right: 15px;
+  border: none;
+  padding: 5px 10px;
+  background-color: #ffa800;
+  border-radius: 5px;
+  cursor: pointer;
+  color: white;
+}
+
+header button:hover {
+  background-color: #ffc14a;
+}
+
+content {
+  position: relative;
+  display: block;
+  width: 100%;
+  /* height: 90vh; */
+  height: calc( 100vh - 85px );
+  background-color: lightgray;
+  overflow: scroll;
+}
+
+
+
+#gantarea {
+  display: inline-block;
+  min-width: 120vw;
+  min-height: 120vh;
+  transform-origin: left top;
+  transition: all 300ms ease-in-out;
+  padding: 50px 10px 10px 10px;
+  background-color: lightgray;
+  z-index: 10;
+}
+
+#gantarea h3 {
+  display: inline-block;
+  font-size: 15px;
+}
+
+.gant-all-bars {
+  position: absolute;
+  left: 10px;
+  top: 50px;
+}
+
+.gant-bar {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 3px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  background-color: #0f86c9;
+  border-radius: 5px;
+  color: white;
+  box-shadow: 0px 1px 10px rgba(0,0,0,0.3);
+  transition: all 200ms ease-in-out;
+  cursor: pointer;
+  z-index: 12;
+}
+
+.gant-bar:hover {
+  background-color: #26a9f2;
+}
+
+.gant-grid {
+  position: sticky;
+  left: 0;
+  top: 0px;
+  margin-top: -50px;
+  width: 100%;
+  height: calc( 100vh - 120px );
+  z-index: 10;
+  background-color: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.grid-column {
+  flex-shrink: 0;
+  flex-grow: 0;
+  height: 100%;
+  border-left: solid 1px darkgray;
+  transition: all 300ms ease-in-out;
+}
+
+.grid-column:hover {
+  background-color: #ede3ce;
+}
+
+.griddate {
+  font-size: 12px;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  position: absolute;
+  left: 200px;
+  top: 200px;
+  border-radius: 5px;
+  z-index: 100;
+  min-width: 0px;
+  max-width: 60vw;
+  min-height: 0px;
+  max-height: 500px;
+  background-color: rgba(0, 0, 0, 0.9);
+  font-size: 14px;
+  color: white;
+  padding: 5px;
+}
+
+.modal h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.btn-shift {
+  background-color: #1897de;
+  width: 20px;
+  height: 20px;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 3px;
+  color: white;
+}
+
+.btn-shift:hover {
+  background-color: #ffc14a;
+}
+
+.btn-wrapper {
+  display: flex;
+  padding: 4px;
+}

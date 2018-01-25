@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>Simple Project Planner</title>
+</head>
+<body>
+
+
+  <div class="page">
+    <header>
+      <div>
+        <h1>SPP</h1>
+        <h3>Simple Project Planner</h3>
+      </div>
+      <!-- <button id="creategantt">Create Gantt</button> -->
+      <button id="zoomout">Zoom Out</button>
+      <button id="zoomin">Zoom 1:1</button>
+      <div style="width: 30px;"></div>
+      <button id="scaledown"><<</button>
+      <button>Timescale Size</button>
+      <button id="scaleup">>></button>
+    </header>
+    <content>
+      <div class="gant" id="gantarea">
+        <h2> This is the Gant Graph area</h2>
+        <p>You need to use the console on the left to paste data from excel tool or load from file and analyze it to draw the gant chart here.</p>
+
+      </div>
+    </content>
+  </div>
+
+
+  <div class="console is-closed" id="consoleDIV">
+    <div id="consolemain">
+      <div id="dummyload-div">
+        <input type="file" id="files" name="file" accept=".csv" />
+        <button class="console-btn" id="dummyload">Open from file</button>
+      </div>
+      <button class="console-btn" id="savedata">Save to file</button>
+
+      <h3> text console </h3>
+      <textarea id="console-text" cols="65" rows="5">
+
+      </textarea>
+      <button class="console-btn" id="analyzedata">Analyze Console Data</button>
+      <button class="console-btn" id="retrivedata">Retrive Data from Gantt to Console</button>
+    </div>
+    <div id="consolebar">
+      <div class="console-button">></div>
+    </div>
+  </div>
+
+  <div class="modal" id="mouseModal">
+    <div id="modal-name"></div>
+    <div id="modal-owner"></div>
+    <div id="modal-start"></div>
+    <div id="modal-end"></div>
+    <div id="modal-duration"></div>
+  </div>
+
+
+  <script src="js/jquery-3.2.1.min.js" charset="utf-8"></script>
+  <script src="js/moment.js" charset="utf-8"></script>
+  <script src="js/myPM.js" charset="utf-8"></script>
+  <script src="js/main.js" charset="utf-8"></script>
+</body>
+</html>
