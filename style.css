@@ -212,6 +212,29 @@ content {
   top: 50px;
 }
 
+.gant-bar-tools {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 12;
+}
+
+.add-task-btn {
+  background-color: rgba(172, 172, 172, 0.53);
+  border: none;
+  height: 4px;
+  outline: none;
+}
+
+.add-task-btn:hover {
+  background-color: #ffa800;
+}
+.add-task-btn:active {
+  outline: none;
+}
+
+
 .gant-bar {
   position: relative;
   display: flex;

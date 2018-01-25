@@ -51,6 +51,30 @@ function readCsvDataToTasks(){
 
 }
 
+function insertTask(position){
+  // we will define the time of the task based on mouse position on clicking
+  let mouseRelativeX = Math.round((mouseX - gant.offset().left) / gantzoom);
+  let newTaskStartTime = minTime + mouseRelativeX * (1000*60*60) / skala;
+
+  console.log('insert at: ', position);
+  console.log('mouse time at: ', moment(newTaskStartTime).format('DD-MM-YYYY'));
+
+  // now we can create a new proto task
+  let zadanie = {
+    nazwa: 'New Added Task',
+    start: newTaskStartTime,
+    trwa: 1 * 7 *24 *60 *60 *1000, // 1 week in ms
+    kto: 'none',
+    timeline: 0,
+    follow: false,
+    complete: 0,
+  };
+
+  tasks.splice(position, 0, zadanie);
+  updateTasks();
+  creategantt();
+
+}
 
 function shiftTask(task, shift){
   // console.log(task, shift);
@@ -91,7 +115,7 @@ function updateTasks(){
     if(t > 0 && tasks[t].follow){
       tasks[t].start = tasks[t-1].start + tasks[t-1].trwa
     }
-    if(tasks[t].start < minTime) {
+    if(tasks[t].start <= minTime) {
       let currentTaskStart = tasks[t].start;
       let currentTaskDay = moment(currentTaskStart).day();
       // console.log('the day is: ',currentTaskDay);

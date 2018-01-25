@@ -148,7 +148,18 @@ function creategantt() {
   for (let t=0; t < tasks.length; t++){
     // task = tasks[t];
     let currrentstyle = '';
+
     let preBtn;
+
+    if( t === 0){
+      htmlis += `<div class="gant-bar-tools">
+                <button class="add-task-btn"
+                onClick="insertTask(${t})">
+                ...</button></div>`;
+    } else {
+      // htmlis += `<div class="gant-bar-tools">`;
+    }
+
 
     if (!tasks[t].start){
       tasks[t].start = tasks[t-1].start + tasks[t-1].trwa;
@@ -196,7 +207,12 @@ function creategantt() {
               </div>
               `;
 
+    htmlis += `<div class="gant-bar-tools">
+              <button class="add-task-btn"
+              onClick="insertTask(${t+1})">
+              ...</button></div>`;
   }
+
 
   htmlis += '</div>';
   gant.html('');
