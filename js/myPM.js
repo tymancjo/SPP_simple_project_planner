@@ -1,8 +1,8 @@
 // The myPM library for Task Management tool
 // by TymancjO - started 24-01-2018
 
-// after https://jsfiddle.net/rce6nn3z/
 function download(filename, text) {
+  // after https://jsfiddle.net/rce6nn3z/
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
   element.setAttribute('download', filename);
@@ -15,6 +15,50 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
+function showTaskDetail(taskId){
+  console.log('to be edited: ', taskId);
+  // gathering some data for edit window :)
+  let task = tasks[taskId];
+
+  $('input[name="taskName"]').val(task.nazwa);
+  $('input[name="taskOwner"]').val(task.kto);
+  $('input[name="taskStart"]').val(moment(task.start).format('YYYY-MM-DD'));
+  $('input[name="taskDuration"]').val((task.trwa / (1000*60*60*24*7)));
+  $('input[name="taskTimeline"]').val(task.timeline);
+  $('input[name="taskDone"]').val(task.complete);
+
+  $('#task-edit-apply').attr('targetId',taskId);
+  $('#task-edit-delete').attr('targetId',taskId);
+
+  $('#taskInfo').removeClass('is-hidden');
+}
+
+function updateSingleTask(taskId){
+  tasks[taskId].nazwa = $('input[name="taskName"]').val();
+  tasks[taskId].kto = $('input[name="taskOwner"]').val();
+  tasks[taskId].start = Number(moment($('input[name="taskStart"]').val()));
+  tasks[taskId].trwa = parseInt($('input[name="taskDuration"]').val()) * (1000*60*60*24*7);
+  tasks[taskId].timeline = $('input[name="taskTimeline"]').val();
+  tasks[taskId].complete = parseFloat($('input[name="taskDone"]').val());
+
+  $('#task-edit-apply').attr('targetId', 'none');
+
+  $('#taskInfo').addClass('is-hidden');
+
+  // updateTasks();
+  creategantt();
+}
+
+function deleteSingleTask(taskId){
+  tasks.splice(taskId, 1);
+  updateTasks();
+  creategantt();
+}
+
+function askYesNo(attribs){
+  $('#confirm-yes').attr('functionParams', attribs);
+  $('#confirm-box').removeClass('is-hidden');
+}
 
 function readCsvDataToTasks(){
   if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
@@ -53,11 +97,13 @@ function readCsvDataToTasks(){
 
 function insertTask(position){
   // we will define the time of the task based on mouse position on clicking
-  let mouseRelativeX = Math.round((mouseX - gant.offset().left) / gantzoom);
+  // but rounded to the week - as this is the main time unit here
+  let weeksize = skala * (7 * 24);
+  let mouseRelativeX = weeksize * Math.floor(((mouseX - gant.offset().left) / gantzoom)/weeksize);
   let newTaskStartTime = minTime + mouseRelativeX * (1000*60*60) / skala;
 
-  console.log('insert at: ', position);
-  console.log('mouse time at: ', moment(newTaskStartTime).format('DD-MM-YYYY'));
+  // console.log('insert at: ', position);
+  // console.log('mouse time at: ', moment(newTaskStartTime).format('DD-MM-YYYY'));
 
   // now we can create a new proto task
   let zadanie = {

@@ -41,16 +41,17 @@
         <button class="console-btn" id="dummyload">Open from file</button>
       </div>
       <button class="console-btn" id="savedata">Save to file</button>
+      <button class="console-btn" id="resetdata">Start New Project</button>
+      <hr>
 
       <h3> text console </h3>
-      <textarea id="console-text" cols="65" rows="5">
-
-      </textarea>
+      <textarea id="console-text" cols="65" rows="5"></textarea>
       <button class="console-btn" id="analyzedata">Analyze Console Data</button>
       <button class="console-btn" id="retrivedata">Retrive Data from Gantt to Console</button>
     </div>
     <div id="consolebar">
-      <div class="console-button">></div>
+      <!-- <div class="console-button">></div> -->
+      |||
     </div>
   </div>
 
@@ -60,6 +61,29 @@
     <div id="modal-start"></div>
     <div id="modal-end"></div>
     <div id="modal-duration"></div>
+  </div>
+
+  <div class="modal info-box is-hidden" id="taskInfo">
+    <h3>Task Edit</h3>
+    Task: <input type="text" name="taskName" value="">
+    Owner: <input type="text" name="taskOwner" value="">
+    Start date: <input type="text" name="taskStart" value="">
+    Duration: <input type="text" name="taskDuration" value="">
+    Task Timeline: <input type="text" name="taskTimeline" value="">
+    Task done in: <input type="text" name="taskDone" value="">
+    <button class="console-btn" id="task-edit-cancel">Cancel</button>
+    <button class="console-btn" id="task-edit-apply">Apply</button>
+    <div class="spacer" style="height: 25px;"></div>
+    <button class="console-btn" id="task-edit-delete">Delete Task</button>
+
+  </div>
+
+  <div class="modal info-box is-hidden" id="confirm-box">
+    <h3>Are You Sure?</h3>
+    <button class="console-btn" id="confirm-yes">Yes</button>
+    <div class="spacer" style="height: 25px;"></div>
+    <button class="console-btn" id="confirm-no">No</button>
+
   </div>
 
 

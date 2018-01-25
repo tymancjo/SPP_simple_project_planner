@@ -31,9 +31,7 @@ body {
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
 
-.is-closed {
-  transform: translateX(calc( -1 * 100% + 26px ));
-}
+
 
 
 #consolebar {
@@ -45,7 +43,12 @@ body {
   width: 30px;
   height: 100vh;
   background-color: #647c8c;
+  cursor: pointer;
+  transition: background-color 200ms ease-in-out
+}
 
+#consolebar:hover {
+  background-color: #4f738b;
 }
 
 .console-button {
@@ -81,7 +84,7 @@ body {
 #consolemain textarea {
   display: block;
   width: 100%;
-  height: 65%;
+  height: 40%;
   border: none;
   padding: 20px;
 }
@@ -286,6 +289,11 @@ content {
   font-size: 12px;
 }
 
+.current-week {
+  border-left: solid 2px red;
+  background-color: rgba(255, 193, 74, 0.46);
+}
+
 .modal {
   display: flex;
   flex-direction: column;
@@ -311,6 +319,12 @@ content {
   font-weight: bold;
 }
 
+.info-box {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .btn-shift {
   background-color: #1897de;
   width: 20px;
@@ -332,4 +346,13 @@ content {
 .btn-wrapper {
   display: flex;
   padding: 4px;
+}
+
+
+.is-closed {
+  transform: translateX(calc( -1 * 100% + 26px ));
+}
+
+.is-hidden {
+  display: none;
 }

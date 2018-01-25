@@ -6,18 +6,25 @@ var skala = 1;
 var gantzoom = 1;
 var mouseX = 0;
 var mouseY = 0;
+var hooveredtask;
+var hooveredtaskId;
+var currentConfirm;
 
-var minTime = 0;
+var minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+
 
 $(document).ready(()=>{
 
 // binding mousemove actions
 $('body').mousemove(function(evt){
     if ($(evt.target).attr('TaskIndex')) {
+      hooveredtaskId = $(evt.target).attr('TaskIndex');
       hooveredtask = tasks[$(evt.target).attr('TaskIndex')];
     } else if ($(evt.target).parent().attr('TaskIndex') ){
+      hooveredtaskId = $(evt.target).parent().attr('TaskIndex');
       hooveredtask = tasks[$(evt.target).parent().attr('TaskIndex')];
     } else {
+      hooveredtaskId = false;
       hooveredtask = false;
     }
     mouseX = evt.pageX;
@@ -26,21 +33,43 @@ $('body').mousemove(function(evt){
 
 });
 
+
+
 // Binding to change actions
-$('#files').change(readCsvDataToTasks);
+  $('#files').change(()=>{
+    resetData();
+    readCsvDataToTasks();
+    $('.console').toggleClass('is-closed');
+  });
 
 // Button bindings to actions
-  $('.console-button').click(()=>{
-    $('.console').toggleClass('is-closed');
-    $('.console-button').toggleClass('rotated');
+  $(document).click(()=>{
+    if (hooveredtask) {
+        showTaskDetail(hooveredtaskId);
+    }
+
+    if (!tasks.length){
+      insertTask(0);
+    }
   });
 
-  $('.btn-shift').on('click', (e)=>{
-    event.stopPropagation();
-    event.stopImmediatePropagation();
-    // console.log(e);
-    // console.log('ojeju');
+
+  $('.console-button').click(()=>{
+    $('.console').toggleClass('is-closed');
+    // $('.console-button').toggleClass('rotated');
   });
+
+  $('#consolebar').click(()=>{
+    $('.console').toggleClass('is-closed');
+    // $('.console-button').toggleClass('rotated');
+  });
+
+  // $('.btn-shift').on('click', (e)=>{
+  //   event.stopPropagation();
+  //   event.stopImmediatePropagation();
+  //   // console.log(e);
+  //   // console.log('ojeju');
+  // });
 
   $('#analyzedata').click(()=>{
     analyzedata();
@@ -52,6 +81,8 @@ $('#files').change(readCsvDataToTasks);
     $('.console-button').removeClass('rotated');
   });
 
+
+
   $('#retrivedata').click(()=>{
     returnTasks();
     // creategantt();
@@ -59,8 +90,14 @@ $('#files').change(readCsvDataToTasks);
     // $('.console-button').removeClass('rotated');
   });
 
+  $('#resetdata').click(()=>{
+    resetData();
+    $('.console').toggleClass('is-closed');
+  });
+
   $('#savedata').click(()=>{
     download("SPP-data.csv", tasksToCsv());
+    $('.console').toggleClass('is-closed');
   });
 
   $('#creategantt').click(creategantt);
@@ -81,8 +118,44 @@ $('#files').change(readCsvDataToTasks);
     creategantt();
   });
 
+ $('#task-edit-cancel').click(()=>{
+   $('#taskInfo').addClass('is-hidden');
+ });
+
+ $('#task-edit-apply').click(()=>{
+    let taskId = $('#task-edit-apply').attr('targetId');
+    updateSingleTask(taskId);
+ });
+
+ $('#task-edit-delete').click(()=>{
+    let taskId = $('#task-edit-delete').attr('targetId');
+    askYesNo(taskId);
+
+    // deleteSingleTask(taskId);
+    $('#taskInfo').addClass('is-hidden');
+ });
+
+ $('#confirm-yes').click(()=>{
+   let execAttr = $('#confirm-yes').attr('functionParams');
+   deleteSingleTask(execAttr);
+   $('#confirm-box').addClass('is-hidden');
+ });
+
+ $('#confirm-no').click(()=>{
+   $('#confirm-box').addClass('is-hidden');
+ });
+
+
 
 });
+
+function resetData(){
+  console.log('RESET');
+  tasks = [];
+  minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+  gant.html('');
+  creategantt();
+}
 
 function updateModal(x,y, task = null){
   // lest instert the text
@@ -226,9 +299,15 @@ function creategantt() {
   // // console.log(gridcols);
 
   let gridcolumn = '';
+  let thisWeek =  Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
 
     for(let w=0; w <= gridcols; w++) {
       thegridtime = minTime + w * (7*24*60*60*1000);
+      let extraStyle = '';
+      if (thegridtime <= thisWeek){
+        extraStyle = 'current-week';
+      }
+
       thedate = new Date(thegridtime);
       datetext = '<span class="griddate">' + thedate.getDate().toString().padStart(2, "0") + '-' + (thedate.getMonth()+1).toString().padStart(2, "0") + '-' + thedate.getFullYear() + "</span>";
 
@@ -236,7 +315,7 @@ function creategantt() {
 
       datetext += '  FW' + fweek;
 
-      gridcolumn += `<div class="grid-column" style="width: ${weeksize}px;">${datetext}</div>`;
+      gridcolumn += `<div class="grid-column ${extraStyle}" style="width: ${weeksize}px;">${datetext}</div>`;
     }
 
   $('#gantarea').css('height', 1.25 * parseInt($('.gant-all-bars').css('height')));
@@ -283,11 +362,11 @@ function analyzedata(separator = '\t') {
 
 
       let zadanie = {
-        nazwa: task[2],
+        nazwa: $.trim(task[2]),
         start: startDate,
         trwa: trwanie,
-        kto: task[1],
-        timeline: task[0],
+        kto: $.trim(task[1]),
+        timeline: parseInt(task[0]),
         follow: follow,
         complete: parseFloat(task[6]),
       };
