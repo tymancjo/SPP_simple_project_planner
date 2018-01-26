@@ -11,12 +11,13 @@ var hooveredtaskId;
 var currentConfirm;
 
 var minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+var maxTime = minTime;
 
 
 $(document).ready(()=>{
 
 // binding mousemove actions
-$('body').mousemove(function(evt){
+$(document).mousemove(function(evt){
     if ($(evt.target).attr('TaskIndex')) {
       hooveredtaskId = $(evt.target).attr('TaskIndex');
       hooveredtask = tasks[$(evt.target).attr('TaskIndex')];
@@ -43,12 +44,12 @@ $('body').mousemove(function(evt){
   });
 
 // Button bindings to actions
-  $(document).click(()=>{
+  gant.click(()=>{
     if (hooveredtask) {
         showTaskDetail(hooveredtaskId);
     }
 
-    if (!tasks.length){
+    if (!tasks.length && mouseX > gant.offset().left){
       insertTask(0);
     }
   });
@@ -64,12 +65,6 @@ $('body').mousemove(function(evt){
     // $('.console-button').toggleClass('rotated');
   });
 
-  // $('.btn-shift').on('click', (e)=>{
-  //   event.stopPropagation();
-  //   event.stopImmediatePropagation();
-  //   // console.log(e);
-  //   // console.log('ojeju');
-  // });
 
   $('#analyzedata').click(()=>{
     analyzedata();
@@ -118,6 +113,9 @@ $('body').mousemove(function(evt){
     creategantt();
   });
 
+  $('#mapview').click(mapView);
+  $('#closemap').click(normalView);
+
  $('#task-edit-cancel').click(()=>{
    $('#taskInfo').addClass('is-hidden');
  });
@@ -153,6 +151,7 @@ function resetData(){
   console.log('RESET');
   tasks = [];
   minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+  maxTime = minTime;
   gant.html('');
   creategantt();
 }
@@ -161,6 +160,8 @@ function updateModal(x,y, task = null){
   // lest instert the text
   if(task){
     // console.log('having task');
+    $('#mouseModal').css('padding','10px');
+
     $('#modal-name').html('<h2>'+task.nazwa+'</h2>');
     $('#modal-owner').html('<h2>'+task.kto+'</h2>');
     $('#modal-start').text('From: ' + moment(task.start).format('DD-MM-YYYY'));
@@ -173,6 +174,7 @@ function updateModal(x,y, task = null){
     $('#modal-start').text('');
     $('#modal-end').text('');
     $('#modal-duration').text('');
+    $('#mouseModal').css('padding','0');
   }
 
   // now lets check the modal size
@@ -190,6 +192,8 @@ function updateModal(x,y, task = null){
   if (y + modalH > docH ) {
     y = y - modalH - 10;
   }
+
+  // console.log('mxy: ', x, y);
 
   $('#mouseModal').css('left', x + 'px');
   $('#mouseModal').css('top', y + 'px');
@@ -302,7 +306,7 @@ function creategantt() {
   let thisWeek =  Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
 
     for(let w=0; w <= gridcols; w++) {
-      thegridtime = minTime + w * (7*24*60*60*1000);
+      let thegridtime = minTime + w * (7*24*60*60*1000);
       let extraStyle = '';
       if (thegridtime <= thisWeek){
         extraStyle = 'current-week';
@@ -371,7 +375,12 @@ function analyzedata(separator = '\t') {
         complete: parseFloat(task[6]),
       };
 
+      if (trwanie === 0) {
+        trwanie = (2 * 24 * 60 * 60 * 1000);
+      }
+
       if ((zadanie.start && zadanie.start < minTime) || minTime === 0) {minTime = zadanie.start}
+      if (zadanie.start && zadanie.start+trwanie > maxTime) {maxTime = zadanie.start+trwanie}
 
       tasks.push(zadanie);
       // console.log(zadanie.nazwa);

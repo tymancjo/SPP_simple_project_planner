@@ -168,10 +168,15 @@ function updateTasks(){
 
       minTime = currentTaskStart - (currentTaskDay - 1) * 24 *60 *60 *1000; // to start grids on mondays
     }
+
+    let trwanie = tasks[t].trwa;
+    if (trwanie === 0) {
+      trwanie = (2 * 24 * 60 * 60 * 1000);
+    }
+
+    if (tasks[t].start+trwanie > maxTime) { maxTime = tasks[t].start+trwanie}
   }
 }
-
-
 
 function returnTasks(){
   let outputStr = '';

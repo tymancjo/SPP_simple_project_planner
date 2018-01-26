@@ -9,6 +9,13 @@
 </head>
 <body>
 
+  <div class="full-page-close is-hidden" id="mapViewX">
+    <button id="closemap" class="console-button">X</button>
+  </div>
+  <div class="full-page-view is-hidden" id="mapViewDiv">
+    <div id="mapGantArea"></div>
+    <div id="mapGantGrid"></div>
+  </div>
 
   <div class="page">
     <header>
@@ -16,13 +23,15 @@
         <h1>SPP</h1>
         <h3>Simple Project Planner</h3>
       </div>
-      <!-- <button id="creategantt">Create Gantt</button> -->
+      <button id="creategantt">Redraw Gantt</button>
       <button id="zoomout">Zoom Out</button>
       <button id="zoomin">Zoom 1:1</button>
       <div style="width: 30px;"></div>
       <button id="scaledown"><<</button>
       <button>Timescale Size</button>
       <button id="scaleup">>></button>
+      <div style="width: 30px;"></div>
+      <button id="mapview">MapView</button>
     </header>
     <content>
       <div class="gant" id="gantarea">
@@ -91,6 +100,7 @@
 
   <script src="js/jquery-3.2.1.min.js" charset="utf-8"></script>
   <script src="js/moment.js" charset="utf-8"></script>
+  <script src="js/myPMgraph.js" charset="utf-8"></script>
   <script src="js/myPM.js" charset="utf-8"></script>
   <script src="js/main.js" charset="utf-8"></script>
 </body>
