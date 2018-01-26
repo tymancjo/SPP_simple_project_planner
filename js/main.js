@@ -9,8 +9,9 @@ var mouseY = 0;
 var hooveredtask;
 var hooveredtaskId;
 var currentConfirm;
-
-var minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+var isMapView = false;
+var isEdit = false;
+var minTime = Number(moment(moment().format('YYYY-MM-DD')) - (moment().day()-1)* 24 *60 *60 *1000);
 var maxTime = minTime;
 
 
@@ -53,6 +54,13 @@ $(document).mousemove(function(evt){
       insertTask(0);
     }
   });
+
+  $('#mapGantArea').click(()=>{
+    if (hooveredtask) {
+        showTaskDetail(hooveredtaskId);
+    }
+  });
+
 
 
   $('.console-button').click(()=>{
@@ -118,6 +126,11 @@ $(document).mousemove(function(evt){
 
  $('#task-edit-cancel').click(()=>{
    $('#taskInfo').addClass('is-hidden');
+   isEdit = false;
+ });
+ $('#task-edit-cancel2').click(()=>{
+   $('#taskInfo').addClass('is-hidden');
+   isEdit = false;
  });
 
  $('#task-edit-apply').click(()=>{
@@ -131,6 +144,7 @@ $(document).mousemove(function(evt){
 
     // deleteSingleTask(taskId);
     $('#taskInfo').addClass('is-hidden');
+    isEdit = false;
  });
 
  $('#confirm-yes').click(()=>{
@@ -150,7 +164,7 @@ $(document).mousemove(function(evt){
 function resetData(){
   console.log('RESET');
   tasks = [];
-  minTime = Number(moment() - (moment().day()-1)* 24 *60 *60 *1000);
+  minTime = Number(moment(moment().format('YYYY-MM-DD')) - (moment().day()-1)* 24 *60 *60 *1000);
   maxTime = minTime;
   gant.html('');
   creategantt();
@@ -355,7 +369,7 @@ function analyzedata(separator = '\t') {
 
     if (task.length > 1 && task[2]) {
       // let startDate = Number(Date.parse(task[4]));
-      let startDate = Number(moment(task[4]));
+      let startDate = moment(moment(task[4]).format('YYYY-MM-DD')).valueOf();
       let trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
 
       if ($.trim(task[3]) === 'y'){

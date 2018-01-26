@@ -15,7 +15,7 @@ function download(filename, text) {
   document.body.removeChild(element);
 }
 
-function showTaskDetail(taskId){
+function showTaskDetail(taskId) {
   console.log('to be edited: ', taskId);
   // gathering some data for edit window :)
   let task = tasks[taskId];
@@ -23,93 +23,126 @@ function showTaskDetail(taskId){
   $('input[name="taskName"]').val(task.nazwa);
   $('input[name="taskOwner"]').val(task.kto);
   $('input[name="taskStart"]').val(moment(task.start).format('YYYY-MM-DD'));
-  $('input[name="taskDuration"]').val((task.trwa / (1000*60*60*24*7)));
+  $('input[name="taskDuration"]').val((task.trwa / (1000 * 60 * 60 * 24 * 7)));
   $('input[name="taskTimeline"]').val(task.timeline);
   $('input[name="taskDone"]').val(task.complete);
 
-  $('#task-edit-apply').attr('targetId',taskId);
-  $('#task-edit-delete').attr('targetId',taskId);
+  $('#task-edit-apply').attr('targetId', taskId);
+  $('#task-edit-delete').attr('targetId', taskId);
 
+  //and here the moving buttons preaprations
+  //btn-wrapper-space
+  let preBtn;
+  let t = taskId;
+  if (t > 0) {
+    preBtn = `<div class="btn-wrapper">
+              <button class="btn-shift" onClick="shiftTask(${t},-1)"><</button>
+              <button class="btn-shift" onClick="shiftTask(${t},1)">></button>
+              <button class="btn-shift" onClick="linkTask(${t})">!</button>
+              <button class="btn-shift" onClick="breakTask(${t})">#</button>
+              <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
+              <button class="btn-shift" onClick="extendTask(${t},1)"> + </button>
+              </div>`;
+  } else {
+    preBtn = `<div class="btn-wrapper">
+              <button class="btn-shift" onClick="shiftTask(${t},-1)"> < </button>
+              <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button>
+              <button class="btn-shift" onClick=""></button>
+              <button class="btn-shift" onClick=""></button>
+              <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
+              <button class="btn-shift" onClick="extendTask(${t},1)"> + </button>
+              </div>`;
+  }
+  // adding buttons to its place in modal window
+  $('#btn-wrapper-space').html(preBtn);
+
+  // and show the dialog modal window
   $('#taskInfo').removeClass('is-hidden');
+  isEdit = true;
 }
 
-function updateSingleTask(taskId){
+function updateSingleTask(taskId) {
   tasks[taskId].nazwa = $('input[name="taskName"]').val();
   tasks[taskId].kto = $('input[name="taskOwner"]').val();
-  tasks[taskId].start = Number(moment($('input[name="taskStart"]').val()));
-  tasks[taskId].trwa = parseInt($('input[name="taskDuration"]').val()) * (1000*60*60*24*7);
+  tasks[taskId].start = moment($('input[name="taskStart"]').val()).valueOf();
+  tasks[taskId].trwa = parseInt($('input[name="taskDuration"]').val()) * (1000 * 60 * 60 * 24 * 7);
   tasks[taskId].timeline = $('input[name="taskTimeline"]').val();
   tasks[taskId].complete = parseFloat($('input[name="taskDone"]').val());
 
   $('#task-edit-apply').attr('targetId', 'none');
 
   $('#taskInfo').addClass('is-hidden');
+  isEdit = false;
 
-  // updateTasks();
+  updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
 }
 
-function deleteSingleTask(taskId){
+function deleteSingleTask(taskId) {
   tasks.splice(taskId, 1);
   updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
 }
 
-function askYesNo(attribs){
+function askYesNo(attribs) {
   $('#confirm-yes').attr('functionParams', attribs);
   $('#confirm-box').removeClass('is-hidden');
 }
 
-function readCsvDataToTasks(){
+function readCsvDataToTasks() {
   if (!window.File || !window.FileReader || !window.FileList || !window.Blob) {
-      alert('The File APIs are not fully supported in this browser.');
-      return;
-    }
+    alert('The File APIs are not fully supported in this browser.');
+    return;
+  }
 
   let input = $('#files')[0];
 
   if (!input.files) {
-      alert("This browser doesn't seem to support the `files` property of file inputs.");
-    }
-    else if (!input.files[0]) {
-      alert("Please select a file before clicking 'Load'");
-    }
-    else {
-      file = input.files[0];
-      // console.log(file);
+    alert("This browser doesn't seem to support the `files` property of file inputs.");
+  } else if (!input.files[0]) {
+    alert("Please select a file before clicking 'Load'");
+  } else {
+    file = input.files[0];
+    // console.log(file);
 
-      fr = new FileReader();
+    fr = new FileReader();
 
-        fr.onload = function() {
-            // console.log(fr.result);
-            dataconsole.val('');
-            dataconsole.val(fr.result);
-            analyzedata(',');
-            updateTasks();
-            creategantt();
+    fr.onload = function() {
+      // console.log(fr.result);
+      dataconsole.val('');
+      dataconsole.val(fr.result);
+      analyzedata(',');
+      updateTasks();
+      creategantt();
 
-      };
+    };
 
-      fr.readAsText(file);
-    }
+    fr.readAsText(file);
+  }
 
 }
 
-function insertTask(position){
+function insertTask(position, newName = 'New Added Task') {
   // we will define the time of the task based on mouse position on clicking
   // but rounded to the week - as this is the main time unit here
   let weeksize = skala * (7 * 24);
-  let mouseRelativeX = weeksize * Math.floor(((mouseX - gant.offset().left) / gantzoom)/weeksize);
-  let newTaskStartTime = minTime + mouseRelativeX * (1000*60*60) / skala;
+  let mouseRelativeX = weeksize * Math.round(((mouseX - gant.offset().left) / gantzoom) / weeksize);
+  let newTaskStartTime = minTime + mouseRelativeX * (1000 * 60 * 60) / skala;
 
   // console.log('insert at: ', position);
   // console.log('mouse time at: ', moment(newTaskStartTime).format('DD-MM-YYYY'));
 
   // now we can create a new proto task
   let zadanie = {
-    nazwa: 'New Added Task',
+    nazwa: newName,
     start: newTaskStartTime,
-    trwa: 1 * 7 *24 *60 *60 *1000, // 1 week in ms
+    trwa: 1 * 7 * 24 * 60 * 60 * 1000, // 1 week in ms
     kto: 'none',
     timeline: 0,
     follow: false,
@@ -120,53 +153,81 @@ function insertTask(position){
   updateTasks();
   creategantt();
 
+  if (isEdit) {
+    showTaskDetail(position);
+  }
+
 }
 
-function shiftTask(task, shift){
+function shiftTask(task, shift) {
   // console.log(task, shift);
-  tasks[task].start += shift * 7 * 24 *60 *60 *1000;
+  tasks[task].start += shift * 7 * 24 * 60 * 60 * 1000;
   updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
+  if (isEdit) {
+    showTaskDetail(task);
+  }
 }
 
-function extendTask(task, shift){
+function extendTask(task, shift) {
   // console.log(task, shift);
-  tasks[task].trwa += shift * 7 * 24 *60 *60 *1000;
-  if (tasks[task].trwa < 0 ) {
+  tasks[task].trwa += shift * 7 * 24 * 60 * 60 * 1000;
+  if (tasks[task].trwa < 0) {
     tasks[task].trwa = 0;
   }
   updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
+  if (isEdit) {
+    showTaskDetail(task);
+  }
 }
 
-function breakTask(task){
-  if (tasks[task].follow){
-    tasks[task]. follow = false;
+function breakTask(task) {
+  if (tasks[task].follow) {
+    tasks[task].follow = false;
   }
   updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
+  if (isEdit) {
+    showTaskDetail(task);
+  }
 }
 
-function linkTask(task){
-  if (task > 0 && !tasks[task].follow){
+function linkTask(task) {
+  if (task > 0 && !tasks[task].follow) {
     tasks[task].follow = true;
   }
   updateTasks();
   creategantt();
+  if (isMapView) {
+    mapView();
+  }
+  if (isEdit) {
+    showTaskDetail(task);
+  }
 }
 
-function updateTasks(){
+function updateTasks() {
   minTime = tasks[0].start;
-  for(let t=0; t < tasks.length; t++){
-    if(t > 0 && tasks[t].follow){
-      tasks[t].start = tasks[t-1].start + tasks[t-1].trwa
+  for (let t = 0; t < tasks.length; t++) {
+    if (t > 0 && tasks[t].follow) {
+      tasks[t].start = tasks[t - 1].start + tasks[t - 1].trwa
     }
-    if(tasks[t].start <= minTime) {
+    if (tasks[t].start <= minTime) {
       let currentTaskStart = tasks[t].start;
       let currentTaskDay = moment(currentTaskStart).day();
       // console.log('the day is: ',currentTaskDay);
 
-      minTime = currentTaskStart - (currentTaskDay - 1) * 24 *60 *60 *1000; // to start grids on mondays
+      minTime = currentTaskStart - (currentTaskDay - 1) * 24 * 60 * 60 * 1000; // to start grids on mondays
     }
 
     let trwanie = tasks[t].trwa;
@@ -174,16 +235,18 @@ function updateTasks(){
       trwanie = (2 * 24 * 60 * 60 * 1000);
     }
 
-    if (tasks[t].start+trwanie > maxTime) { maxTime = tasks[t].start+trwanie}
+    if (tasks[t].start + trwanie > maxTime) {
+      maxTime = tasks[t].start + trwanie
+    }
   }
 }
 
-function returnTasks(){
+function returnTasks() {
   let outputStr = '';
-  for(let i=0; i < tasks.length; i++){
+  for (let i = 0; i < tasks.length; i++) {
     t = tasks[i];
     let follower = '';
-    if(t.follow){
+    if (t.follow) {
       follower = 'y';
     }
 
@@ -194,14 +257,14 @@ function returnTasks(){
   dataconsole.val(outputStr);
 }
 
-function tasksToCsv(){
+function tasksToCsv() {
 
   let outputStr = '';
 
-  for(let i=0; i < tasks.length; i++){
+  for (let i = 0; i < tasks.length; i++) {
     t = tasks[i];
     let follower = '';
-    if(t.follow){
+    if (t.follow) {
       follower = 'y';
     }
 

@@ -422,20 +422,44 @@ content {
 }
 
 .mapView-milestone {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   position: relative;
   background-color: #ffa800;
   border-radius: 3px;
   box-shadow: 0 3px 5px darkgray;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis
 }
 
 .mapView-task {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
   position: relative;
   background-color: #0f86c9;
   border-radius: 3px;
   box-shadow: 0 3px 5px darkgray;
+  color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+  overflow: hidden;
+  white-space:nowrap;
+  text-overflow:ellipsis
 }
 
 .mapView-task:hover,
 .mapView-milestone:hover {
   box-shadow: 0 3px 5px black;
+}
+
+.mapView-linked {
+  background-color: #0fc9b3;
 }
