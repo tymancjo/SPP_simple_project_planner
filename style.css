@@ -375,9 +375,9 @@ content {
 }
 
 .info-box {
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
+  left: 30%;
+  top: calc( 50% - 300px );
+  /*transform: translate(-50%, -50%);*/
 }
 
 .btn-shift {
@@ -546,4 +546,13 @@ content {
 
 .text-center {
   text-align: center;
+}
+
+.unselectable {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

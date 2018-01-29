@@ -15,6 +15,10 @@ var isMapView = false;
 var isEdit = false;
 var minTime = Number(moment(moment().format('YYYY-MM-DD')) - (moment().day() - 1) * 24 * 60 * 60 * 1000);
 var maxTime = minTime;
+var dragItem = null;
+var isDragged = false;
+var dX;
+var dY;
 
 
 $(document).ready(() => {
@@ -35,6 +39,26 @@ $(document).ready(() => {
         mouseY = evt.pageY;
         updateModal(mouseX + 20, mouseY + 20, hooveredtask);
 
+        if(dragItem){
+            if(!isDragged){
+                dX = mouseX - parseInt($(dragItem).css('left')); 
+                dY = mouseY - parseInt($(dragItem).css('top')); 
+            }
+
+            isDragged = true;
+            $(dragItem).css('left', mouseX - dX + 'px');
+            $(dragItem).css('top', mouseY - dY + 'px');
+        }
+
+    });
+
+    $('#info-box-bar').mousedown(()=>{
+        dragItem = "#taskInfo";
+    });
+    
+    $(document).mouseup(()=>{
+        dragItem = null;
+        isDragged = false;
     });
 
 
@@ -46,9 +70,12 @@ $(document).ready(() => {
     });
 
     // Binding to jquery-ui draggable
-    $('#taskInfo').draggable({
-        handle: "h3"
-    });
+
+    // $('#taskInfo').draggable({
+    //     handle: "h3"
+    // });
+
+
 
     // Button bindings to actions
     gant.click(() => {

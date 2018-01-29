@@ -2,6 +2,7 @@
 
 // This is the display functions set fro myPM in JS
 
+
 function mapToggleText() {
   // this function shows or hide all text in mapView
   var textIn = $('.mapBar-in-text');
@@ -82,10 +83,8 @@ function mapView() {
 
       // lets work on if to show tasks names here
       // first lets figure out font size
-      var fontSize = 0.8 * px_per_task;
-      if (fontSize > maxfont) {
-        fontSize = maxfont;
-      }
+
+      var fontSize = maxfont;
 
       var inDivTxt = '';
       var outDivTxt = '';
