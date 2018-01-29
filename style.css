@@ -22,11 +22,15 @@ body {
   flex-direction: column;
   justify-content: flex-start;
   align-content: center;
-  right: 5px;
-  top: 5px;
+  right: 15px;
+  top: 15px;
   z-index: 199;
-  opacity: 0.3;
+  opacity: 0.1;  
+  background-color: gray;
+  padding: 10px;
+  border-radius: 10px;
   transition: opacity 200ms ease-in-out;
+  width: 70px;
 }
 .full-page-close:hover {
   opacity: 1;
@@ -424,6 +428,19 @@ content {
   color: darkgray;
 }
 
+.map-past-week {
+  background-color: rgba(100,100,100,0.1);
+  border-right: 1px solid white;
+  color: white;
+
+}
+
+.map-current-week {
+  background-color: rgba(100,100,100,0.1);
+  border-right: 1px solid red;
+  color: red;
+}
+
 .mapView-milestone {
   display: flex;
   justify-content: flex-start;
@@ -468,7 +485,8 @@ content {
 }
 
 .mapBar-in-text {
-  color: #252525;
+  /*color: #252525;*/
+
 }
 .mapBar-out-text {
   color: #252525;

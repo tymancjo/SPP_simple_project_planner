@@ -1,6 +1,27 @@
 
 // This is the display functions set fro myPM in JS
 
+function mapToggleText() {
+  // this function shows or hide all text in mapView
+  let textIn = $('.mapBar-in-text');
+  let textOut = $('.mapBar-out-text');
+    textIn.toggle();
+    textOut.toggle();
+}
+
+function mapTextSizeUp(factor) {
+  // this functions bump text size in map view
+  let textIn = $('.mapBar-in-text');
+  let textOut = $('.mapBar-out-text');
+  let textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
+
+      console.log(textSize);  
+      textSize = Math.round(factor * textSize);
+
+      textIn.css('font-size', textSize + 'px');
+      textOut.css('font-size', textSize + 'px');
+
+}
 
 function mapView(fulltext=true, maxfont=15) {
   //some assumed values
@@ -70,6 +91,8 @@ function mapView(fulltext=true, maxfont=15) {
           // let inDivTxtIn = inDivTxt.substr(0,maxCharsInName-1);
           // let inDivTxtOut = inDivTxt.substr(maxCharsInName - 1,inDivTxt.length);
           inDivTxt = '<span style ="margin-left: '+pixelWidth+'px;" class="mapBar-out-text">' + inDivTxt + '</span>';
+        } else {
+          inDivTxt = '<span  class="mapBar-in-text">' + inDivTxt + '</span>';
         }
       }
     }
@@ -92,8 +115,19 @@ function mapView(fulltext=true, maxfont=15) {
   for (let i = 0; i < w; i++) {
       let thegridtime = minTime + i * (7*24*60*60*1000);
       let fweek = moment(thegridtime).week();
-      ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">
-                  FW${fweek}</div>`;
+      let currentweek = moment().week();
+      if (fweek === currentweek) {
+        ganthtml += `<div class="map-gant-grid-col map-current-week" style="width: ${width};">
+                    FW${fweek}</div>`;
+
+      } else if (fweek < currentweek) {
+        ganthtml += `<div class="map-gant-grid-col map-past-week" style="width: ${width};">
+                        FW${fweek}</div>`;
+    
+      } else {
+        ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">
+                    FW${fweek}</div>`;
+    }
   }
 
   gridDiv.html(ganthtml);

@@ -335,10 +335,10 @@ function creategantt() {
             extraStyle = 'current-week';
         }
 
-        let thedate = new Date(thegridtime);
-        let datetext = '<span class="griddate">' + thedate.getDate().toString().padStart(2, "0") + '-' + (thedate.getMonth() + 1).toString().padStart(2, "0") + '-' + thedate.getFullYear() + "</span>";
+        let thedate = moment(thegridtime).format('DD-MM-YYYY');
+        let datetext = '<span class="griddate">' + thedate + "</span>";
 
-        let fweek = moment(thedate).week();
+        let fweek = moment(thegridtime).week();
 
         datetext += '  FW' + fweek;
 

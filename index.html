@@ -10,10 +10,11 @@
 <body>
 
   <div class="full-page-close is-hidden" id="mapViewX">
-    <button id="closemap" class="console-button">X</button>
-    text size <button>+</button><button>-</button>
-    <button>hide text</button>
-    <button>show text</button>
+    <button id="closemap" >Close View</button>
+    text config 
+    <button onclick="mapTextSizeUp(1.2)">+</button>
+    <button onclick="mapTextSizeUp(1/1.2)">-</button>
+    <button id="map-hide-text" onclick="mapToggleText()">show hide</button>
   </div>
 
   <div class="full-page-view is-hidden" id="mapViewDiv">
