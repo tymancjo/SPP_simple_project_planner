@@ -15,8 +15,8 @@ function mapTextSizeUp(factor) {
   let textOut = $('.mapBar-out-text');
   let textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
 
-      console.log(textSize);  
       textSize = Math.round(factor * textSize);
+      console.log('new text size: ', textSize, 'px');  
 
       textIn.css('font-size', textSize + 'px');
       textOut.css('font-size', textSize + 'px');
@@ -48,8 +48,8 @@ function mapView(fulltext=true, maxfont=15) {
   let t = 0;
   for (let task of tasks) {
     let left = Math.round((task.start - minTime) / (1000*60*60*24)) * (pp_per_week / 7) + "%";
-    let height = (0.8 * pp_per_task) + "%";
-    let margin = (0.05 * pp_per_task) + "%";
+    let height = Math.round(80 * pp_per_task)/100 + "%";
+    let margin = Math.round(10 * pp_per_task)/100 + "%";
     let box_style = 'mapView-task';
 
     if(task.follow) {
@@ -74,6 +74,8 @@ function mapView(fulltext=true, maxfont=15) {
     if(fontSize > maxfont){fontSize = maxfont;}
     
     let inDivTxt = '';
+    let outDivTxt='';
+
     if (fontSize > 1) {
       inDivTxt = task.nazwa;
       // console.log(inDivTxt.length, fontSize);
@@ -90,7 +92,8 @@ function mapView(fulltext=true, maxfont=15) {
         if (inDivTxt.length > maxCharsInName) {
           // let inDivTxtIn = inDivTxt.substr(0,maxCharsInName-1);
           // let inDivTxtOut = inDivTxt.substr(maxCharsInName - 1,inDivTxt.length);
-          inDivTxt = '<span style ="margin-left: '+pixelWidth+'px;" class="mapBar-out-text">' + inDivTxt + '</span>';
+          outDivTxt = '<span class="mapBar-out-text">' + inDivTxt + '</span>';
+          inDivTxt = '';
         } else {
           inDivTxt = '<span  class="mapBar-in-text">' + inDivTxt + '</span>';
         }
@@ -99,9 +102,11 @@ function mapView(fulltext=true, maxfont=15) {
 
     fontSize += 'px';
 
-    ganthtml += `<div style="left: ${left}; width: ${width}; height: ${height}; margin-bottom: ${margin}; font-size: ${fontSize};" TaskIndex="${t}" class="${box_style}">${inDivTxt}</div>`;
+        ganthtml += `<div class="map-gant-row" style="height: ${height}; margin-bottom: ${margin}; "> <div style="margin-left: ${left}; width: ${width}; height: 100%;" TaskIndex="${t}" class="${box_style}">${inDivTxt}</div><div class="map-after-task">${outDivTxt}</div></div>`;
+    
     t++;
   }
+
   targetDiv.html(ganthtml);
 
   // Now lets work over the FiscalWeek grid system

@@ -16,8 +16,8 @@ function mapTextSizeUp(factor) {
   var textOut = $('.mapBar-out-text');
   var textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
 
-  console.log(textSize);
   textSize = Math.round(factor * textSize);
+  console.log('new text size: ', textSize, 'px');
 
   textIn.css('font-size', textSize + 'px');
   textOut.css('font-size', textSize + 'px');
@@ -58,8 +58,8 @@ function mapView() {
       var task = _step.value;
 
       var left = Math.round((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7) + "%";
-      var height = 0.8 * pp_per_task + "%";
-      var margin = 0.05 * pp_per_task + "%";
+      var height = Math.round(80 * pp_per_task) / 100 + "%";
+      var margin = Math.round(10 * pp_per_task) / 100 + "%";
       var box_style = 'mapView-task';
 
       if (task.follow) {
@@ -84,6 +84,8 @@ function mapView() {
       }
 
       var inDivTxt = '';
+      var outDivTxt = '';
+
       if (fontSize > 1) {
         inDivTxt = task.nazwa;
         // console.log(inDivTxt.length, fontSize);
@@ -100,7 +102,8 @@ function mapView() {
           if (inDivTxt.length > maxCharsInName) {
             // let inDivTxtIn = inDivTxt.substr(0,maxCharsInName-1);
             // let inDivTxtOut = inDivTxt.substr(maxCharsInName - 1,inDivTxt.length);
-            inDivTxt = '<span style ="margin-left: ' + pixelWidth + 'px;" class="mapBar-out-text">' + inDivTxt + '</span>';
+            outDivTxt = '<span class="mapBar-out-text">' + inDivTxt + '</span>';
+            inDivTxt = '';
           } else {
             inDivTxt = '<span  class="mapBar-in-text">' + inDivTxt + '</span>';
           }
@@ -109,7 +112,8 @@ function mapView() {
 
       fontSize += 'px';
 
-      ganthtml += '<div style="left: ' + left + '; width: ' + _width + '; height: ' + height + '; margin-bottom: ' + margin + '; font-size: ' + fontSize + ';" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div>';
+      ganthtml += '<div class="map-gant-row" style="height: ' + height + '; margin-bottom: ' + margin + '; "> <div style="margin-left: ' + left + '; width: ' + _width + '; height: 100%;" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div><div class="map-after-task">' + outDivTxt + '</div></div>';
+
       t++;
     }
   } catch (err) {
