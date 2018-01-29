@@ -1,3 +1,7 @@
 
 test.html
 .jshintrc
+.babelrc
+.babelrc (1)
+node_modules
+*.json

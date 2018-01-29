@@ -1,6 +1,8 @@
+
 // This is the display functions set fro myPM in JS
 
-function mapView() {
+
+function mapView(fulltext=true, maxfont=15) {
   //some assumed values
   let padding = 0;
   // out target div to put the map view in it
@@ -23,7 +25,7 @@ function mapView() {
   //lets now generate the graph for the tasks.
   let ganthtml = '';
   let t = 0;
-  for (task of tasks) {
+  for (let task of tasks) {
     let left = Math.round((task.start - minTime) / (1000*60*60*24)) * (pp_per_week / 7) + "%";
     let height = (0.8 * pp_per_task) + "%";
     let margin = (0.05 * pp_per_task) + "%";
@@ -48,28 +50,40 @@ function mapView() {
     // lets work on if to show tasks names here
     // first lets figure out font size
     let fontSize = 0.8 * px_per_task;
-    if(fontSize > 40){fontSize = 40;}
-    let inDivTxt = ''
+    if(fontSize > maxfont){fontSize = maxfont;}
+    
+    let inDivTxt = '';
     if (fontSize > 1) {
       inDivTxt = task.nazwa;
       // console.log(inDivTxt.length, fontSize);
-      let maxCharsInName = Math.round(0.01*parseFloat(width)*spaceX / (0.7 * fontSize));
-      // console.log(maxCharsInName);
-      if (inDivTxt.length > maxCharsInName) {
-        inDivTxt = inDivTxt.substr(0,maxCharsInName-1) + '\u2026';
+      
+      let pixelWidth = 0.01*parseFloat(width)*spaceX;
+      let maxCharsInName = Math.round(pixelWidth / (0.7 * fontSize));
+      
+      if (fulltext === false){
+        // console.log(maxCharsInName);
+        if (inDivTxt.length > maxCharsInName) {
+          inDivTxt = inDivTxt.substr(0,maxCharsInName-1) + '\u2026';
+        } 
+      } else {
+        if (inDivTxt.length > maxCharsInName) {
+          // let inDivTxtIn = inDivTxt.substr(0,maxCharsInName-1);
+          // let inDivTxtOut = inDivTxt.substr(maxCharsInName - 1,inDivTxt.length);
+          inDivTxt = '<span style ="margin-left: '+pixelWidth+'px;" class="mapBar-out-text">' + inDivTxt + '</span>';
+        }
       }
     }
 
     fontSize += 'px';
 
-    ganthtml += `<div style="left: ${left}; width: ${width}; height: ${height}; margin-bottom: ${margin}; font-size: ${fontSize};" TaskIndex="${t}" class="${box_style}">${inDivTxt}</div>`
+    ganthtml += `<div style="left: ${left}; width: ${width}; height: ${height}; margin-bottom: ${margin}; font-size: ${fontSize};" TaskIndex="${t}" class="${box_style}">${inDivTxt}</div>`;
     t++;
   }
   targetDiv.html(ganthtml);
 
   // Now lets work over the FiscalWeek grid system
   // we know from above the size of single week mark
-  width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
+  let width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
   // now we figure out how many weeks we need to draw
   let w = Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
 

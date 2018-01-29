@@ -18,8 +18,11 @@ body {
 
 .full-page-close {
   position: absolute;
-  display: inline-block;
-  left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-content: center;
+  right: 5px;
   top: 5px;
   z-index: 199;
   opacity: 0.3;
@@ -433,7 +436,7 @@ content {
   padding-left: 5px;
   padding-right: 5px;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
   white-space:nowrap;
   text-overflow:ellipsis
 }
@@ -450,7 +453,7 @@ content {
   padding-left: 5px;
   padding-right: 5px;
   cursor: pointer;
-  overflow: hidden;
+  overflow: visible;
   white-space:nowrap;
   text-overflow:ellipsis
 }
@@ -462,4 +465,11 @@ content {
 
 .mapView-linked {
   background-color: #0fc9b3;
+}
+
+.mapBar-in-text {
+  color: #252525;
+}
+.mapBar-out-text {
+  color: #252525;
 }

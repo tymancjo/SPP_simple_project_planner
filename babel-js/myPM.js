@@ -1,3 +1,5 @@
+'use strict';
+
 // The myPM library for Task Management tool
 // by TymancjO - started 24-01-2018
 
@@ -18,12 +20,12 @@ function download(filename, text) {
 function showTaskDetail(taskId) {
   console.log('to be edited: ', taskId);
   // gathering some data for edit window :)
-  let task = tasks[taskId];
+  var task = tasks[taskId];
 
   $('input[name="taskName"]').val(task.nazwa);
   $('input[name="taskOwner"]').val(task.kto);
   $('input[name="taskStart"]').val(moment(task.start).format('YYYY-MM-DD'));
-  $('input[name="taskDuration"]').val((task.trwa / (1000 * 60 * 60 * 24 * 7)));
+  $('input[name="taskDuration"]').val(task.trwa / (1000 * 60 * 60 * 24 * 7));
   $('input[name="taskTimeline"]').val(task.timeline);
   $('input[name="taskDone"]').val(task.complete);
 
@@ -32,26 +34,12 @@ function showTaskDetail(taskId) {
 
   //and here the moving buttons preaprations
   //btn-wrapper-space
-  let preBtn;
-  let t = taskId;
+  var preBtn = void 0;
+  var t = taskId;
   if (t > 0) {
-    preBtn = `<div class="btn-wrapper">
-              <button class="btn-shift" onClick="shiftTask(${t},-1)"><</button>
-              <button class="btn-shift" onClick="shiftTask(${t},1)">></button>
-              <button class="btn-shift" onClick="linkTask(${t})">!</button>
-              <button class="btn-shift" onClick="breakTask(${t})">#</button>
-              <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
-              <button class="btn-shift" onClick="extendTask(${t},1)"> + </button>
-              </div>`;
+    preBtn = '<div class="btn-wrapper">\n              <button class="btn-shift" onClick="shiftTask(' + t + ',-1)"><</button>\n              <button class="btn-shift" onClick="shiftTask(' + t + ',1)">></button>\n              <button class="btn-shift" onClick="linkTask(' + t + ')">!</button>\n              <button class="btn-shift" onClick="breakTask(' + t + ')">#</button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',-1)"> - </button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',1)"> + </button>\n              </div>';
   } else {
-    preBtn = `<div class="btn-wrapper">
-              <button class="btn-shift" onClick="shiftTask(${t},-1)"> < </button>
-              <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button>
-              <button class="btn-shift" onClick=""></button>
-              <button class="btn-shift" onClick=""></button>
-              <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
-              <button class="btn-shift" onClick="extendTask(${t},1)"> + </button>
-              </div>`;
+    preBtn = '<div class="btn-wrapper">\n              <button class="btn-shift" onClick="shiftTask(' + t + ',-1)"> < </button>\n              <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button>\n              <button class="btn-shift" onClick=""></button>\n              <button class="btn-shift" onClick=""></button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',-1)"> - </button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',1)"> + </button>\n              </div>';
   }
   // adding buttons to its place in modal window
   $('#btn-wrapper-space').html(preBtn);
@@ -101,52 +89,52 @@ function readCsvDataToTasks() {
     return;
   }
 
-  let input = $('#files')[0];
+  var input = $('#files')[0];
 
   if (!input.files) {
     alert("This browser doesn't seem to support the `files` property of file inputs.");
   } else if (!input.files[0]) {
     alert("Please select a file before clicking 'Load'");
   } else {
-    let file = input.files[0];
+    var file = input.files[0];
     // console.log(file);
 
     var fr = new FileReader();
 
-    fr.onload = function() {
+    fr.onload = function () {
       // console.log(fr.result);
       dataconsole.val('');
       dataconsole.val(fr.result);
       analyzedata(',');
       updateTasks();
       creategantt();
-
     };
 
     fr.readAsText(file);
   }
-
 }
 
-function insertTask(position, newName = 'New Added Task') {
+function insertTask(position) {
+  var newName = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'New Added Task';
+
   // we will define the time of the task based on mouse position on clicking
   // but rounded to the week - as this is the main time unit here
-  let weeksize = skala * (7 * 24);
-  let mouseRelativeX = weeksize * Math.round(((mouseX - gant.offset().left) / gantzoom) / weeksize);
-  let newTaskStartTime = minTime + mouseRelativeX * (1000 * 60 * 60) / skala;
+  var weeksize = skala * (7 * 24);
+  var mouseRelativeX = weeksize * Math.round((mouseX - gant.offset().left) / gantzoom / weeksize);
+  var newTaskStartTime = minTime + mouseRelativeX * (1000 * 60 * 60) / skala;
 
   // console.log('insert at: ', position);
   // console.log('mouse time at: ', moment(newTaskStartTime).format('DD-MM-YYYY'));
 
   // now we can create a new proto task
-  let zadanie = {
+  var zadanie = {
     nazwa: newName,
     start: newTaskStartTime,
     trwa: 1 * 7 * 24 * 60 * 60 * 1000, // 1 week in ms
     kto: 'none',
     timeline: 0,
     follow: false,
-    complete: 0,
+    complete: 0
   };
 
   tasks.splice(position, 0, zadanie);
@@ -156,7 +144,6 @@ function insertTask(position, newName = 'New Added Task') {
   if (isEdit) {
     showTaskDetail(position);
   }
-
 }
 
 function shiftTask(task, shift) {
@@ -218,21 +205,21 @@ function linkTask(task) {
 
 function updateTasks() {
   minTime = tasks[0].start;
-  for (let t = 0; t < tasks.length; t++) {
+  for (var t = 0; t < tasks.length; t++) {
     if (t > 0 && tasks[t].follow) {
       tasks[t].start = tasks[t - 1].start + tasks[t - 1].trwa;
     }
     if (tasks[t].start <= minTime) {
-      let currentTaskStart = tasks[t].start;
-      let currentTaskDay = moment(currentTaskStart).day();
+      var currentTaskStart = tasks[t].start;
+      var currentTaskDay = moment(currentTaskStart).day();
       // console.log('the day is: ',currentTaskDay);
 
       minTime = currentTaskStart - (currentTaskDay - 1) * 24 * 60 * 60 * 1000; // to start grids on mondays
     }
 
-    let trwanie = tasks[t].trwa;
+    var trwanie = tasks[t].trwa;
     if (trwanie === 0) {
-      trwanie = (2 * 24 * 60 * 60 * 1000);
+      trwanie = 2 * 24 * 60 * 60 * 1000;
     }
 
     if (tasks[t].start + trwanie > maxTime) {
@@ -242,15 +229,15 @@ function updateTasks() {
 }
 
 function returnTasks() {
-  let outputStr = '';
-  for (let i = 0; i < tasks.length; i++) {
-    let t = tasks[i];
-    let follower = '';
+  var outputStr = '';
+  for (var i = 0; i < tasks.length; i++) {
+    var t = tasks[i];
+    var follower = '';
     if (t.follow) {
       follower = 'y';
     }
 
-    outputStr += `${t.timeline} \t ${t.kto} \t ${t.nazwa} \t ${follower} \t ${moment(t.start).format('YYYY-MM-DD')} \t ${Math.round(t.trwa/(1000*60*60*24*7))} \t ${t.complete} \n`;
+    outputStr += t.timeline + ' \t ' + t.kto + ' \t ' + t.nazwa + ' \t ' + follower + ' \t ' + moment(t.start).format('YYYY-MM-DD') + ' \t ' + Math.round(t.trwa / (1000 * 60 * 60 * 24 * 7)) + ' \t ' + t.complete + ' \n';
   }
 
   dataconsole.val('');
@@ -259,16 +246,16 @@ function returnTasks() {
 
 function tasksToCsv() {
 
-  let outputStr = '';
+  var outputStr = '';
 
-  for (let i = 0; i < tasks.length; i++) {
-    let t = tasks[i];
-    let follower = '';
+  for (var i = 0; i < tasks.length; i++) {
+    var t = tasks[i];
+    var follower = '';
     if (t.follow) {
       follower = 'y';
     }
 
-    outputStr += `${t.timeline}, ${t.kto}, ${t.nazwa}, ${follower}, ${moment(t.start).format('YYYY-MM-DD')}, ${Math.round(t.trwa/(1000*60*60*24*7))}, ${t.complete} \n`;
+    outputStr += t.timeline + ', ' + t.kto + ', ' + t.nazwa + ', ' + follower + ', ' + moment(t.start).format('YYYY-MM-DD') + ', ' + Math.round(t.trwa / (1000 * 60 * 60 * 24 * 7)) + ', ' + t.complete + ' \n';
   }
 
   return outputStr;
