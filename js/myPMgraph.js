@@ -14,16 +14,19 @@ function mapTextSizeUp(factor) {
   let textIn = $('.mapBar-in-text');
   let textOut = $('.mapBar-out-text');
   let textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
+  let FWmarkSize = parseInt($('.map-gant-grid-col').css('font-size'));
 
       textSize = Math.round(factor * textSize);
+      FWmarkSize = Math.round(factor * FWmarkSize);
+      
       console.log('new text size: ', textSize, 'px');  
 
       textIn.css('font-size', textSize + 'px');
       textOut.css('font-size', textSize + 'px');
-
+      $('.map-gant-grid-col').css('font-size', FWmarkSize +'px');
 }
 
-function mapView(fulltext=true, maxfont=15) {
+function mapView(fulltext=true, maxfont=14) {
   //some assumed values
   let padding = 0;
   // out target div to put the map view in it

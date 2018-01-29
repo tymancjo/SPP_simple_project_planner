@@ -44,6 +44,11 @@ $(document).ready(function () {
         $('.console').toggleClass('is-closed');
     });
 
+    // Binding to jquery-ui draggable
+    $('#taskInfo').draggable({
+        handle: "h3"
+    });
+
     // Button bindings to actions
     gant.click(function () {
         if (hooveredtask) {

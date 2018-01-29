@@ -15,17 +15,21 @@ function mapTextSizeUp(factor) {
   var textIn = $('.mapBar-in-text');
   var textOut = $('.mapBar-out-text');
   var textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
+  var FWmarkSize = parseInt($('.map-gant-grid-col').css('font-size'));
 
   textSize = Math.round(factor * textSize);
+  FWmarkSize = Math.round(factor * FWmarkSize);
+
   console.log('new text size: ', textSize, 'px');
 
   textIn.css('font-size', textSize + 'px');
   textOut.css('font-size', textSize + 'px');
+  $('.map-gant-grid-col').css('font-size', FWmarkSize + 'px');
 }
 
 function mapView() {
   var fulltext = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-  var maxfont = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 15;
+  var maxfont = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 14;
 
   //some assumed values
   var padding = 0;
