@@ -2,7 +2,7 @@
 Simple Project Planner - Gantt based planning tool in JS
 
 Tool for simple Task & Time planner 
-version: 0.2 (I think)
+version: 0.3 (I think)
 
 live version: http://tomasztomanek.pl/pub/spp/
 
@@ -29,12 +29,23 @@ I never find myself very into typical Project Management apps like MS Project. S
   + you can activate the "map view"
 
 ### Map View
+This working mode was a key idea - to have a one look to entire project. Here we can do tasks adjustmens (by the same edit window like in main working view)
 + A single page overview of the all tasks
 + created as place for make a picture for presentations etc.
 + allows some modification work
   + you click on task and you get the same Modification Window as in Main working window
   + the changes are reflected live on the map view
   + You cannot Add task in Map View (at least for now)
+  + You have a quick adjust menu (right top - hover there) where you can:
+    - Adjust the text size
+    - Hide/show the text
+    - Use global filter to show display only some tasks
+    - get back to Main Work View
+
+### Map View Global FIlter
+
+This text input box allows fo display only tasks that contain the entered text in the name, owner, timeline etc.
+It's case sensitive.
 
 
 
