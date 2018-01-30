@@ -31,6 +31,7 @@ function mapTextSizeUp(factor) {
 function mapView() {
   var fulltext = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
   var maxfont = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 14;
+  var widthpercent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 85;
 
   //some assumed values
   var padding = 0;
@@ -44,12 +45,12 @@ function mapView() {
 
   //figuring out x scale
   var px_per_ms = spaceX / (maxTime - minTime);
-  var pp_per_ms = 95 / (maxTime - minTime);
-  var pp_per_week = Math.round(95 / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7)));
+  var pp_per_ms = widthpercent / (maxTime - minTime);
+  var pp_per_week = widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
 
   //figuring out Y scale
   var px_per_task = spaceY / tasks.length;
-  var pp_per_task = 100 / tasks.length;
+  var pp_per_task = 90 / tasks.length;
 
   //lets now generate the graph for the tasks.
   var ganthtml = '';
@@ -62,7 +63,7 @@ function mapView() {
     for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var task = _step.value;
 
-      var left = Math.round((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7) + "%";
+      var left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
       var height = Math.round(80 * pp_per_task) / 100 + "%";
       var margin = Math.round(10 * pp_per_task) / 100 + "%";
       var box_style = 'mapView-task';
@@ -71,7 +72,7 @@ function mapView() {
         box_style += ' mapView-linked';
       }
 
-      var _width = Math.round(Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week) + "%";
+      var _width = Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week) / 100 + "%";
       if (task.trwa === 0) {
         _width = 0.5 * pp_per_week + "%";
         box_style = 'mapView-milestone';
@@ -138,9 +139,12 @@ function mapView() {
 
   // Now lets work over the FiscalWeek grid system
   // we know from above the size of single week mark
-  var width = Math.round(7 * 24 * 60 * 60 * 1000 * pp_per_ms) + "%";
+  // let width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
+  var width = Math.round(100 * pp_per_week) / 100 + "%";
+
   // now we figure out how many weeks we need to draw
-  var w = Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
+  // we will draw few more
+  var w = 2 + Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
 
   // lets now draw the grid by divs
   ganthtml = '';

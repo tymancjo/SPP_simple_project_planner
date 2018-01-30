@@ -481,6 +481,8 @@ content {
   flex-direction: row;
   justify-content: flex-start;
   flex-wrap: nowrap;
+  flex-shrink: 0;
+  flex-grow: 0;
   width: 100%;
 
 }
@@ -498,6 +500,9 @@ content {
   padding-right: 5px;
   cursor: pointer;
   overflow: visible;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .mapView-task {
@@ -514,6 +519,9 @@ content {
   padding-right: 5px;
   cursor: pointer;
   overflow: visible;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  flex-grow: 0;
 
 }
 
@@ -531,6 +539,9 @@ content {
   display: flex;
   align-items: center;
   margin-left: 5px;
+  flex-wrap: nowrap;
+  flex-shrink: 0;
+  flex-grow: 0;
 }
 
 .mapBar-in-text {

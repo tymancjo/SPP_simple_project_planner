@@ -217,6 +217,7 @@ function linkTask(task) {
 }
 
 function updateTasks() {
+  maxTime = 0;
   minTime = tasks[0].start;
   for (let t = 0; t < tasks.length; t++) {
     if (t > 0 && tasks[t].follow) {
