@@ -6,7 +6,9 @@ version: 0.3 (I think)
 
 live version: http://tomasztomanek.pl/pub/spp/
 
-video demo: https://youtu.be/0YB62mltaMs
+video demo: 
+https://youtu.be/nEgHjVBuFh0
+https://youtu.be/0YB62mltaMs
 
 ## short story:
 
