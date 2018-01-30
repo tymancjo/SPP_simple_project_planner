@@ -22,6 +22,12 @@ var isDragged = false;
 var dX;
 var dY;
 
+// object to keep the mapView config
+var mapViewConf = {
+    fontSize: 14,
+    textVisible: true
+};
+
 $(document).ready(function () {
 
     // binding mousemove actions
@@ -67,6 +73,8 @@ $(document).ready(function () {
         readCsvDataToTasks();
         $('.console').toggleClass('is-closed');
     });
+
+    $('#masterFilter').on('keyup change input', mapView);
 
     // Binding to jquery-ui draggable
 
