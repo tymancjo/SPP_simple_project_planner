@@ -26,6 +26,9 @@ var mapViewConf = {
     textVisible: true 
 };
 
+// clippoard array for all copu/paste functionality
+var clippoard = [];
+
 
 $(document).ready(() => {
 

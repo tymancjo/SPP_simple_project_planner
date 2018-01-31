@@ -128,6 +128,38 @@ function readCsvDataToTasks() {
 
 }
 
+function grabTask(position,followers = false, delSrc = false, target = clippoard) {
+  // this function takes the task from tasks and put them into the clippoard target 
+  // followers - if true it will take all dependend follow tasks
+  // delSrc - if true it will delete the task from main task array after grab
+
+  let totalAffected = 1; // the number of tasks we will grab
+  
+  target.push(tasks[position]); // grabbing the first task
+  
+  for(let t = position + 1; t < tasks.length; t++){
+    if(followers && tasks[t].follow) { 
+      console.log('grab 01');
+       totalAffected++;
+       target.push(tasks[t]); // grabbing 
+
+    } else if(tasks[t].follow){
+      console.log('grab 02');
+       tasks[t].follow =  false;  // making the below task fixed to date 
+       break; 
+    } else {
+      console.log('grab 03');
+      break;
+    } // end of if's
+  } // end of loop
+
+  // and now we can delete from source
+  if (delSrc) {
+          tasks.splice(position, totalAffected);
+  }
+
+}
+
 function insertTask(position, newName = 'New Added Task') {
   // we will define the time of the task based on mouse position on clicking
   // but rounded to the week - as this is the main time unit here
