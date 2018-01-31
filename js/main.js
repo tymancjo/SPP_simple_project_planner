@@ -209,6 +209,44 @@ $(document).ready(() => {
         $('#confirm-box').addClass('is-hidden');
     });
 
+    // binding task copy/paste buttons
+    $('#task-edit-copy-one').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, false, false);
+      redrawAll();
+    });
+
+    $('#task-edit-copy-all').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, true, false);
+      redrawAll();
+    });
+
+    $('#task-edit-cut-one').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, false, true);
+      redrawAll();
+    });
+
+    $('#task-edit-cut-all').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, true, true);
+      redrawAll();
+    });
+
+    $('#task-edit-paste-above').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      insertClippoard(position);
+      clippoard = [];
+      redrawAll();
+    });
+
+    $('#task-edit-paste-below').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      insertClippoard(position + 1);
+      clippoard = [];
+      redrawAll();
+    });
 
 
 });

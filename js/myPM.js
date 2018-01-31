@@ -1,6 +1,19 @@
 // The myPM library for Task Management tool
 // by TymancjO - started 24-01-2018
 
+function redrawAll() {
+  // this just update all views etc.
+
+  if(tasks.length > 0) {
+    updateTasks();
+  }
+  
+  creategantt();
+  if (isMapView) {
+    mapView();
+  }
+}
+
 function download(filename, text) {
   // after https://jsfiddle.net/rce6nn3z/
   var element = document.createElement('a');
@@ -128,20 +141,38 @@ function readCsvDataToTasks() {
 
 }
 
+function insertClippoard(position, srcArr = clippoard) {
+  // this function insert tasks form source into given posioton in tasks
+
+  if(clippoard.length > 0){
+    tasks.splice.apply(tasks, [position, 0].concat(srcArr));
+    return true;
+  } else {
+    srcArr = [];
+    return false;
+  }
+}
+
 function grabTask(position,followers = false, delSrc = false, target = clippoard) {
   // this function takes the task from tasks and put them into the clippoard target 
   // followers - if true it will take all dependend follow tasks
   // delSrc - if true it will delete the task from main task array after grab
 
+  console.log('index: ', position);
+  
+  position = parseInt(position);
+
   let totalAffected = 1; // the number of tasks we will grab
   
-  target.push(tasks[position]); // grabbing the first task
+  target.push(Object.assign({}, tasks[position])); // grabbing the first task as clone object
   
   for(let t = position + 1; t < tasks.length; t++){
+    console.log(t);
+
     if(followers && tasks[t].follow) { 
       console.log('grab 01');
        totalAffected++;
-       target.push(tasks[t]); // grabbing 
+       target.push(Object.assign({}, tasks[t])); // grabbing as object clone 
 
     } else if(tasks[t].follow){
       console.log('grab 02');

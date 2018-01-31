@@ -131,6 +131,7 @@ body {
   width: 100%;
   padding: 10px 10px;
   border: none;
+  margin: 2px;
   margin-top: 5px;
   margin-bottom: 5px;
   transition: all 200ms ease;
@@ -348,6 +349,7 @@ content {
   padding: 4px;
   border: none;
   margin-bottom: 5px;
+  width: 100%;
 }
 
 .modal h2 {
@@ -566,4 +568,11 @@ content {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }

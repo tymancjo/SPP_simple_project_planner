@@ -1,123 +1,133 @@
 <!DOCTYPE html>
 <html lang="pl">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="style.css">
-  <title>Simple Project Planner</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <title>Simple Project Planner</title>
 </head>
+
 <body>
-
-  <div class="full-page-close is-hidden" id="mapViewX">
-    <button class="console-btn text-center" id="closemap" >Close View</button>
-    text config 
-    <button class="console-btn text-center" onclick="mapTextSizeUp(1.2)">+</button>
-    <button class="console-btn text-center" onclick="mapTextSizeUp(1/1.2)">-</button>
-    <button class="console-btn text-center" id="map-hide-text" onclick="mapToggleText()">show hide</button>
-    <hr>
-    filter
-    <input type="text" id="masterFilter">
-  </div>
-
-  <div class="full-page-view is-hidden" id="mapViewDiv">
-    <div id="mapGantArea"></div>
-    <div id="mapGantGrid"></div>
-  </div>
-
-  <div class="page">
-    <header>
-      <div>
-        <h1>SPP</h1>
-        <h3>Simple Project Planner</h3>
-      </div>
-      <button id="creategantt">Redraw Gantt</button>
-      <button id="zoomout">Zoom Out</button>
-      <button id="zoomin">Zoom 1:1</button>
-      <div style="width: 30px;"></div>
-      <button id="scaledown"><<</button>
-      <button>Timescale Size</button>
-      <button id="scaleup">>></button>
-      <div style="width: 30px;"></div>
-      <button id="mapview">MapView</button>
-    </header>
-    <content>
-      <div class="gant" id="gantarea">
-        <h2> This is the Gant Graph area</h2>
-        <h4>Click anywhere to set the first task.</h4>
-        <p>You can move it or modify later.</p>
-        <p>You may use the console on the left (click the bar with |||) to paste data from excel tool or load from file and analyze it to draw the gant chart here.</p>
-
-      </div>
-    </content>
-  </div>
-
-
-  <div class="console is-closed" id="consoleDIV">
-    <div id="consolemain">
-      <div id="dummyload-div">
-        <input type="file" id="files" name="file" accept=".csv" />
-        <button class="console-btn" id="dummyload">Open from file</button>
-      </div>
-      <button class="console-btn" id="savedata">Save to file</button>
-      <button class="console-btn" id="resetdata">Start New Project</button>
-      <hr>
-
-      <h3> text console </h3>
-      <textarea id="console-text" cols="65" rows="5"></textarea>
-      <button class="console-btn" id="analyzedata">Analyze Console Data</button>
-      <button class="console-btn" id="retrivedata">Retrive Data from Gantt to Console</button>
-      <button class="console-btn" >made by TymancjO</button>
-      <h3> tomasztomanek.pl </h3>
+    <div class="full-page-close is-hidden" id="mapViewX">
+        <button class="console-btn text-center" id="closemap">Close View</button>
+        text config
+        <button class="console-btn text-center" onclick="mapTextSizeUp(1.2)">+</button>
+        <button class="console-btn text-center" onclick="mapTextSizeUp(1/1.2)">-</button>
+        <button class="console-btn text-center" id="map-hide-text" onclick="mapToggleText()">show hide</button>
+        <hr> filter
+        <input type="text" id="masterFilter">
     </div>
-    <div id="consolebar">
-      <!-- <div class="console-button">></div> -->
-      |||
+    <div class="full-page-view is-hidden" id="mapViewDiv">
+        <div id="mapGantArea"></div>
+        <div id="mapGantGrid"></div>
     </div>
-  </div>
-
-  <div class="modal" id="mouseModal">
-    <div id="modal-name"></div>
-    <div id="modal-owner"></div>
-    <div id="modal-start"></div>
-    <div id="modal-end"></div>
-    <div id="modal-duration"></div>
-  </div>
-
-  <div class="modal info-box is-hidden" id="taskInfo">
-    <h3 id="info-box-bar" class="unselectable">Task Moving&Shaping</h3>
-    <div id="btn-wrapper-space">
+    <div class="page">
+        <header>
+            <div>
+                <h1>SPP</h1>
+                <h3>Simple Project Planner</h3>
+            </div>
+            <button id="creategantt">Redraw Gantt</button>
+            <button id="zoomout">Zoom Out</button>
+            <button id="zoomin">Zoom 1:1</button>
+            <div style="width: 30px;"></div>
+            <button id="scaledown">
+                <<</button>
+                    <button>Timescale Size</button>
+                    <button id="scaleup">>></button>
+                    <div style="width: 30px;"></div>
+                    <button id="mapview">MapView</button>
+        </header>
+        <content>
+            <div class="gant" id="gantarea">
+                <h2> This is the Gant Graph area</h2>
+                <h4>Click anywhere to set the first task.</h4>
+                <p>You can move it or modify later.</p>
+                <p>You may use the console on the left (click the bar with |||) to paste data from excel tool or load from file and analyze it to draw the gant chart here.</p>
+            </div>
+        </content>
     </div>
-    <button class="console-btn" id="task-edit-cancel2">Close</button>
-    <div class="spacer" style="height: 25px;"></div>
-
-    <h2>Task Manual Edit</h2>
-    Task: <input type="text" name="taskName" value="">
-    Owner: <input type="text" name="taskOwner" value="">
-    Start date: <input type="text" name="taskStart" value="">
-    Duration: <input type="text" name="taskDuration" value="">
-    Task Timeline: <input type="text" name="taskTimeline" value="">
-    Task done in: <input type="text" name="taskDone" value="">
-    <button class="console-btn" id="task-edit-cancel">Cancel</button>
-    <button class="console-btn" id="task-edit-apply">Apply</button>
-    <div class="spacer" style="height: 25px;"></div>
-    <button class="console-btn" id="task-edit-delete">Delete Task</button>
-
-  </div>
-
-  <div class="modal info-box is-hidden" id="confirm-box">
-    <h3>Are You Sure?</h3>
-    <button class="console-btn" id="confirm-yes">Yes</button>
-    <div class="spacer" style="height: 25px;"></div>
-    <button class="console-btn" id="confirm-no">No</button>
-
-  </div>
-
-
-  <script src="jslib/jquery-3.2.1.min.js" charset="utf-8"></script>
-  <script src="jslib/moment.js" charset="utf-8"></script>
-  <script src="js/myPMgraph.js" charset="utf-8"></script>
-  <script src="js/myPM.js" charset="utf-8"></script>
-  <script src="js/main.js" charset="utf-8"></script>
+    <div class="console is-closed" id="consoleDIV">
+        <div id="consolemain">
+            <div id="dummyload-div">
+                <input type="file" id="files" name="file" accept=".csv" />
+                <button class="console-btn" id="dummyload">Open from file</button>
+            </div>
+            <button class="console-btn" id="savedata">Save to file</button>
+            <button class="console-btn" id="resetdata">Start New Project</button>
+            <hr>
+            <h3> text console </h3>
+            <textarea id="console-text" cols="65" rows="5"></textarea>
+            <button class="console-btn" id="analyzedata">Analyze Console Data</button>
+            <button class="console-btn" id="retrivedata">Retrive Data from Gantt to Console</button>
+            <button class="console-btn">made by TymancjO</button>
+            <h3> tomasztomanek.pl </h3>
+        </div>
+        <div id="consolebar">
+            <!-- <div class="console-button">></div> -->
+            |||
+        </div>
+    </div>
+    <div class="modal" id="mouseModal">
+        <div id="modal-name"></div>
+        <div id="modal-owner"></div>
+        <div id="modal-start"></div>
+        <div id="modal-end"></div>
+        <div id="modal-duration"></div>
+    </div>
+    <div class="modal info-box is-hidden" id="taskInfo">
+        <h3 id="info-box-bar" class="unselectable"> </h3>
+        <div class="row">
+            move & reshape
+        </div>
+        <div class="row" id="btn-wrapper-space">
+        </div>
+        <div class="row">
+            copy / cut
+        </div>
+        <div class="row">
+            <button class="console-btn" id="task-edit-copy-one">^</button>
+            <button class="console-btn" id="task-edit-copy-all">^^</button>
+            <button class="console-btn" id="task-edit-cut-one">x</button>
+            <button class="console-btn" id="task-edit-cut-all">xx</button>
+            <button class="console-btn" id="task-edit-cancel2">Esc</button>
+        </div>
+        <div class="row">
+          paste
+        </div>
+        <div class="row">
+            <button class="console-btn" id="task-edit-paste-above">Above</button>
+            <button class="console-btn" id="task-edit-paste-below">Below</button>
+          
+        </div>
+        <div class="spacer" style="height: 15px;"></div>
+        <h2>Task Manual Edit</h2> Task:
+        <input type="text" name="taskName" value=""> Owner:
+        <input type="text" name="taskOwner" value=""> Start date:
+        <input type="text" name="taskStart" value=""> Duration:
+        <input type="text" name="taskDuration" value=""> Task Timeline:
+        <input type="text" name="taskTimeline" value=""> Task done in:
+        <input type="text" name="taskDone" value="">
+        <div class="row">
+            <button class="console-btn" id="task-edit-cancel">Cancel</button>
+            <button class="console-btn" id="task-edit-apply">Apply</button>
+        </div>
+        <div class="spacer" style="height: 15px;"></div>
+        <button class="console-btn" id="task-edit-delete">Delete Task</button>
+    </div>
+    <div class="modal info-box is-hidden" id="confirm-box">
+        <h3>Are You Sure?</h3>
+        <button class="console-btn" id="confirm-yes">Yes</button>
+        <div class="spacer" style="height: 25px;"></div>
+        <button class="console-btn" id="confirm-no">No</button>
+    </div>
+    <script src="jslib/jquery-3.2.1.min.js" charset="utf-8"></script>
+    <script src="jslib/moment.js" charset="utf-8"></script>
+    <script src="js/myPMgraph.js" charset="utf-8"></script>
+    <script src="js/myPM.js" charset="utf-8"></script>
+    <script src="js/main.js" charset="utf-8"></script>
 </body>
+
 </html>
