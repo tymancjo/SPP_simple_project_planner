@@ -33,11 +33,14 @@ function mapTextSizeUp(factor) {
     // this functions bump text size in map view
     var textIn = $('.mapBar-in-text');
     var textOut = $('.mapBar-out-text');
-    var textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
+
+    var textSize = mapViewConf.fontSize;
 
     textSize = Math.round(factor * textSize);
 
     mapViewConf.fontSize = textSize;
+
+    console.log('changing text size');
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
@@ -176,10 +179,13 @@ function mapView() {
     for (var i = 0; i < w; i++) {
         var thegridtime = minTime + i * (7 * 24 * 60 * 60 * 1000);
         var fweek = moment(thegridtime).week();
+        var fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         var currentweek = moment().week();
-        if (fweek === currentweek) {
+        var currentyear = moment().year();
+
+        if (fweek === currentweek && fyear === currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-current-week" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
-        } else if (fweek < currentweek) {
+        } else if (fweek < currentweek && fyear <= currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-past-week" style="width: ' + width + ';">\n                        FW' + fweek + '</div>';
         } else {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';

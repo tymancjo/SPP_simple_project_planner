@@ -184,7 +184,10 @@ function grabTask(position) {
 
     var totalAffected = 1; // the number of tasks we will grab
 
-    target.push(Object.assign({}, tasks[position])); // grabbing the first task as clone object
+    var grabbed = Object.assign({}, tasks[position]); // grabbing the first task as clone object
+    grabbed.follow = false; // making the task not a fllower - to paste in position.
+
+    target.push(grabbed);
 
     for (var t = position + 1; t < tasks.length; t++) {
         console.log(t);
