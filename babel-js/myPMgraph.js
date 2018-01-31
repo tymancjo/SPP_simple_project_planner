@@ -132,7 +132,9 @@ function mapView() {
 
                 fontSize += 'px';
 
-                ganthtml += '<div class="map-gant-row" style="height: ' + height + '; margin-bottom: ' + margin + '; "> <div style="margin-left: ' + left + '; width: ' + _width + '; height: 100%;" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div><div class="map-after-task">' + outDivTxt + '</div></div>';
+                var divId = "map-" + t;
+
+                ganthtml += '<div class="map-gant-row" style="height: ' + height + '; margin-bottom: ' + margin + '; "> <div id="' + divId + '" style="margin-left: ' + left + '; width: ' + _width + '; height: 100%;" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div><div class="map-after-task">' + outDivTxt + '</div></div>';
             } // end of IF for the master search string match
             t++; // here we increase the index (as we use for of loop)
         } // end of looping over tasks
@@ -193,6 +195,14 @@ function mapView() {
     $('#mapViewX').removeClass('is-hidden');
     $('.page').addClass('is-hidden');
     $('.console').addClass('is-hidden');
+
+    // lets higlight selected if needed
+    if (isEdit) {
+        var position = parseInt($('#task-edit-apply').attr('targetId'));
+        higlightTaskDiv(position);
+    } else {
+        clearHiglight();
+    }
     isMapView = true;
 }
 

@@ -576,3 +576,7 @@ content {
   justify-content: center;
   width: 100%;
 }
+
+.selected-div {
+  border: solid 2px red;
+}

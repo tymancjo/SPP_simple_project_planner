@@ -179,10 +179,12 @@ $(document).ready(() => {
     $('#task-edit-cancel').click(() => {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
     $('#task-edit-cancel2').click(() => {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
 
     $('#task-edit-apply').click(() => {
@@ -203,6 +205,7 @@ $(document).ready(() => {
         let execAttr = $('#confirm-yes').attr('functionParams');
         deleteSingleTask(execAttr);
         $('#confirm-box').addClass('is-hidden');
+
     });
 
     $('#confirm-no').click(() => {
@@ -242,7 +245,7 @@ $(document).ready(() => {
     });
 
     $('#task-edit-paste-below').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
+      let position = parseInt($('#task-edit-apply').attr('targetId'));
       insertClippoard(position + 1);
       clippoard = [];
       redrawAll();
@@ -377,9 +380,9 @@ function creategantt() {
         }
 
 
+        let divId = "main-" + t;
 
-
-        htmlis += `<div class="gant-bar" style="${currrentstyle}" TaskIndex="${t}">${preBtn}
+        htmlis += `<div id="${divId}" class="gant-bar" style="${currrentstyle}" TaskIndex="${t}">${preBtn}
               <h3 style="font-size: ${fontsize}px;">${tasks[t].nazwa}</h3>
               <div class="btn-wrapper">
               <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
@@ -430,6 +433,14 @@ function creategantt() {
     // $('.gant-grid').css('height', 1.25 * parseInt($('.gant-all-bars').css('height')));
     $('.gant-grid').html(gridcolumn);
     // // console.log(gridcolumn);
+
+    // lets higlight selected if needed
+    if (isEdit) {
+      let position = parseInt($('#task-edit-apply').attr('targetId'));
+      higlightTaskDiv(position);
+    } else {
+      clearHiglight();
+    } 
 
 
 
