@@ -33,11 +33,14 @@ function mapTextSizeUp(factor) {
     // this functions bump text size in map view
     var textIn = $('.mapBar-in-text');
     var textOut = $('.mapBar-out-text');
-    var textSize = Math.max(parseInt(textIn.css('font-size')), parseInt(textOut.css('font-size')));
+
+    var textSize = mapViewConf.fontSize;
 
     textSize = Math.round(factor * textSize);
 
     mapViewConf.fontSize = textSize;
+
+    console.log('changing text size');
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
@@ -132,7 +135,9 @@ function mapView() {
 
                 fontSize += 'px';
 
-                ganthtml += '<div class="map-gant-row" style="height: ' + height + '; margin-bottom: ' + margin + '; "> <div style="margin-left: ' + left + '; width: ' + _width + '; height: 100%;" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div><div class="map-after-task">' + outDivTxt + '</div></div>';
+                var divId = "map-" + t;
+
+                ganthtml += '<div class="map-gant-row" style="height: ' + height + '; margin-bottom: ' + margin + '; "> <div id="' + divId + '" style="margin-left: ' + left + '; width: ' + _width + '; height: 100%;" TaskIndex="' + t + '" class="' + box_style + '">' + inDivTxt + '</div><div class="map-after-task">' + outDivTxt + '</div></div>';
             } // end of IF for the master search string match
             t++; // here we increase the index (as we use for of loop)
         } // end of looping over tasks
@@ -174,10 +179,13 @@ function mapView() {
     for (var i = 0; i < w; i++) {
         var thegridtime = minTime + i * (7 * 24 * 60 * 60 * 1000);
         var fweek = moment(thegridtime).week();
+        var fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         var currentweek = moment().week();
-        if (fweek === currentweek) {
+        var currentyear = moment().year();
+
+        if (fweek === currentweek && fyear === currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-current-week" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
-        } else if (fweek < currentweek) {
+        } else if (fweek < currentweek && fyear <= currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-past-week" style="width: ' + width + ';">\n                        FW' + fweek + '</div>';
         } else {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
@@ -193,6 +201,14 @@ function mapView() {
     $('#mapViewX').removeClass('is-hidden');
     $('.page').addClass('is-hidden');
     $('.console').addClass('is-hidden');
+
+    // lets higlight selected if needed
+    if (isEdit) {
+        var position = parseInt($('#task-edit-apply').attr('targetId'));
+        higlightTaskDiv(position);
+    } else {
+        clearHiglight();
+    }
     isMapView = true;
 }
 

@@ -28,6 +28,9 @@ var mapViewConf = {
     textVisible: true
 };
 
+// clippoard array for all copu/paste functionality
+var clippoard = [];
+
 $(document).ready(function () {
 
     // binding mousemove actions
@@ -169,10 +172,12 @@ $(document).ready(function () {
     $('#task-edit-cancel').click(function () {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
     $('#task-edit-cancel2').click(function () {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
 
     $('#task-edit-apply').click(function () {
@@ -197,6 +202,45 @@ $(document).ready(function () {
 
     $('#confirm-no').click(function () {
         $('#confirm-box').addClass('is-hidden');
+    });
+
+    // binding task copy/paste buttons
+    $('#task-edit-copy-one').click(function () {
+        var position = $('#task-edit-apply').attr('targetId');
+        grabTask(position, false, false);
+        redrawAll();
+    });
+
+    $('#task-edit-copy-all').click(function () {
+        var position = $('#task-edit-apply').attr('targetId');
+        grabTask(position, true, false);
+        redrawAll();
+    });
+
+    $('#task-edit-cut-one').click(function () {
+        var position = $('#task-edit-apply').attr('targetId');
+        grabTask(position, false, true);
+        redrawAll();
+    });
+
+    $('#task-edit-cut-all').click(function () {
+        var position = $('#task-edit-apply').attr('targetId');
+        grabTask(position, true, true);
+        redrawAll();
+    });
+
+    $('#task-edit-paste-above').click(function () {
+        var position = $('#task-edit-apply').attr('targetId');
+        insertClippoard(position);
+        clippoard = [];
+        redrawAll();
+    });
+
+    $('#task-edit-paste-below').click(function () {
+        var position = parseInt($('#task-edit-apply').attr('targetId'));
+        insertClippoard(position + 1);
+        clippoard = [];
+        redrawAll();
     });
 });
 
@@ -317,7 +361,9 @@ function creategantt() {
             preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n        onClick="shiftTask(' + t + ',-1)"> < </button>\n        <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button></div>';
         }
 
-        htmlis += '<div class="gant-bar" style="' + currrentstyle + '" TaskIndex="' + t + '">' + preBtn + '\n              <h3 style="font-size: ' + fontsize + 'px;">' + tasks[t].nazwa + '</h3>\n              <div class="btn-wrapper">\n              <button class="btn-shift" onClick="extendTask(' + t + ',-1)"> - </button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',1)"> + </button>\n              </div>\n              </div>\n              ';
+        var divId = "main-" + t;
+
+        htmlis += '<div id="' + divId + '" class="gant-bar" style="' + currrentstyle + '" TaskIndex="' + t + '">' + preBtn + '\n              <h3 style="font-size: ' + fontsize + 'px;">' + tasks[t].nazwa + '</h3>\n              <div class="btn-wrapper">\n              <button class="btn-shift" onClick="extendTask(' + t + ',-1)"> - </button>\n              <button class="btn-shift" onClick="extendTask(' + t + ',1)"> + </button>\n              </div>\n              </div>\n              ';
 
         htmlis += '<div class="gant-bar-tools">\n              <button class="add-task-btn"\n              onClick="insertTask(' + (t + 1) + ')">\n              ...</button></div>';
     }
@@ -357,6 +403,13 @@ function creategantt() {
     $('.gant-grid').html(gridcolumn);
     // // console.log(gridcolumn);
 
+    // lets higlight selected if needed
+    if (isEdit) {
+        var position = parseInt($('#task-edit-apply').attr('targetId'));
+        higlightTaskDiv(position);
+    } else {
+        clearHiglight();
+    }
 }
 
 function analyzedata() {

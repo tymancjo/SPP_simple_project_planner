@@ -26,6 +26,9 @@ var mapViewConf = {
     textVisible: true 
 };
 
+// clippoard array for all copu/paste functionality
+var clippoard = [];
+
 
 $(document).ready(() => {
 
@@ -176,10 +179,12 @@ $(document).ready(() => {
     $('#task-edit-cancel').click(() => {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
     $('#task-edit-cancel2').click(() => {
         $('#taskInfo').addClass('is-hidden');
         isEdit = false;
+        clearHiglight();
     });
 
     $('#task-edit-apply').click(() => {
@@ -200,12 +205,51 @@ $(document).ready(() => {
         let execAttr = $('#confirm-yes').attr('functionParams');
         deleteSingleTask(execAttr);
         $('#confirm-box').addClass('is-hidden');
+
     });
 
     $('#confirm-no').click(() => {
         $('#confirm-box').addClass('is-hidden');
     });
 
+    // binding task copy/paste buttons
+    $('#task-edit-copy-one').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, false, false);
+      redrawAll();
+    });
+
+    $('#task-edit-copy-all').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, true, false);
+      redrawAll();
+    });
+
+    $('#task-edit-cut-one').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, false, true);
+      redrawAll();
+    });
+
+    $('#task-edit-cut-all').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      grabTask(position, true, true);
+      redrawAll();
+    });
+
+    $('#task-edit-paste-above').click(()=>{
+      let position = $('#task-edit-apply').attr('targetId');
+      insertClippoard(position);
+      clippoard = [];
+      redrawAll();
+    });
+
+    $('#task-edit-paste-below').click(()=>{
+      let position = parseInt($('#task-edit-apply').attr('targetId'));
+      insertClippoard(position + 1);
+      clippoard = [];
+      redrawAll();
+    });
 
 
 });
@@ -336,9 +380,9 @@ function creategantt() {
         }
 
 
+        let divId = "main-" + t;
 
-
-        htmlis += `<div class="gant-bar" style="${currrentstyle}" TaskIndex="${t}">${preBtn}
+        htmlis += `<div id="${divId}" class="gant-bar" style="${currrentstyle}" TaskIndex="${t}">${preBtn}
               <h3 style="font-size: ${fontsize}px;">${tasks[t].nazwa}</h3>
               <div class="btn-wrapper">
               <button class="btn-shift" onClick="extendTask(${t},-1)"> - </button>
@@ -389,6 +433,14 @@ function creategantt() {
     // $('.gant-grid').css('height', 1.25 * parseInt($('.gant-all-bars').css('height')));
     $('.gant-grid').html(gridcolumn);
     // // console.log(gridcolumn);
+
+    // lets higlight selected if needed
+    if (isEdit) {
+      let position = parseInt($('#task-edit-apply').attr('targetId'));
+      higlightTaskDiv(position);
+    } else {
+      clearHiglight();
+    } 
 
 
 
