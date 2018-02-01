@@ -207,24 +207,28 @@ $(document).ready(function () {
     // binding task copy/paste buttons
     $('#task-edit-copy-one').click(function () {
         var position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
         grabTask(position, false, false);
         redrawAll();
     });
 
     $('#task-edit-copy-all').click(function () {
         var position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
         grabTask(position, true, false);
         redrawAll();
     });
 
     $('#task-edit-cut-one').click(function () {
         var position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
         grabTask(position, false, true);
         redrawAll();
     });
 
     $('#task-edit-cut-all').click(function () {
         var position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
         grabTask(position, true, true);
         redrawAll();
     });
