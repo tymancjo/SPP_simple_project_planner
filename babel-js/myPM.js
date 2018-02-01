@@ -198,7 +198,9 @@ function grabTask(position) {
             target.push(Object.assign({}, tasks[t])); // grabbing as object clone 
         } else if (tasks[t].follow) {
             console.log('grab 02');
-            tasks[t].follow = false; // making the below task fixed to date 
+            if (delSrc) {
+                tasks[t].follow = false;
+            } // making the below task fixed to date 
             break;
         } else {
             console.log('grab 03');
