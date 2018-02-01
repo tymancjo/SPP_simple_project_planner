@@ -193,7 +193,7 @@ function grabTask(position, followers = false, delSrc = false, target = clippoar
     grabbed.follow = false;  // making the task not a fllower - to paste in position.
 
     target.push(grabbed); 
-    
+
     for (let t = position + 1; t < tasks.length; t++) {
         console.log(t);
 
@@ -204,7 +204,7 @@ function grabTask(position, followers = false, delSrc = false, target = clippoar
 
         } else if (tasks[t].follow) {
             console.log('grab 02');
-            tasks[t].follow = false; // making the below task fixed to date 
+            if(delSrc) {tasks[t].follow = false;} // making the below task fixed to date 
             break;
         } else {
             console.log('grab 03');
