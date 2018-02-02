@@ -185,7 +185,7 @@ function mapView() {
 
         if (fweek === currentweek && fyear === currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-current-week" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
-        } else if (fweek < currentweek && fyear <= currentyear) {
+        } else if (fweek < currentweek && fyear === currentyear || fyear < currentyear) {
             ganthtml += '<div class="map-gant-grid-col map-past-week" style="width: ' + width + ';">\n                        FW' + fweek + '</div>';
         } else {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';

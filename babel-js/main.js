@@ -449,7 +449,11 @@ function analyzedata() {
 
             if (task.length > 1 && task[2]) {
                 // let startDate = Number(Date.parse(task[4]));
-                var startDate = moment(moment(task[4]).format('YYYY-MM-DD')).valueOf();
+
+                var startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+
+                console.log('data: ', startDate);
+
                 var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
                 var follow = void 0;
 
