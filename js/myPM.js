@@ -363,5 +363,18 @@ function tasksToCsv() {
         outputStr += `${t.timeline}, ${t.kto}, ${t.nazwa}, ${follower}, ${moment(t.start).format('YYYY-MM-DD')}, ${Math.round(t.trwa/(1000*60*60*24*7))}, ${t.complete} \n`;
     }
 
+    outputStr += 'x,x,_fwx_,'+ arrayToStringTT(markedFW);
+
     return outputStr;
+}
+
+function arrayToStringTT(argument) {
+  // This function makes a string from array
+  let output = '';
+  if(argument.length){
+    for(let item of argument) {
+        output += item + "#";
+    }
+  }
+  return output;
 }
