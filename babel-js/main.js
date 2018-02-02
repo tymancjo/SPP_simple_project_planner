@@ -31,6 +31,9 @@ var mapViewConf = {
 // clippoard array for all copu/paste functionality
 var clippoard = [];
 
+// the array of market FW for grid markings (Maciek FR) 
+var markedFW = [];
+
 $(document).ready(function () {
 
     // binding mousemove actions
@@ -251,9 +254,11 @@ $(document).ready(function () {
 function resetData() {
     console.log('RESET');
     tasks = [];
+    markedFW = [];
     minTime = Number(moment(moment().format('YYYY-MM-DD')) - (moment().day() - 1) * 24 * 60 * 60 * 1000);
     maxTime = minTime;
     gant.html('');
+
     creategantt();
 }
 
@@ -431,61 +436,66 @@ function analyzedata() {
 
             var task = line.split(separator);
 
-            console.log(task);
+            // console.log(task);
 
             if (task.length === 1) {
                 task = line.split(',');
-                console.log('trying ,');
-                console.log(task);
+                // console.log('trying ,');
+                // console.log(task);
             }
 
             if (task.length === 1) {
                 task = line.split(';');
-                console.log('trying ;');
-                console.log(task);
+                // console.log('trying ;');
+                // console.log(task);
             }
 
-            console.log(task.length);
+            // console.log((task.length));
 
             if (task.length > 1 && task[2]) {
-                // let startDate = Number(Date.parse(task[4]));
+                if (task[2] !== '_fwx_') {
+                    // let startDate = Number(Date.parse(task[4]));
 
-                var startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+                    var startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
 
-                console.log('data: ', startDate);
+                    console.log('data: ', startDate);
 
-                var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
-                var follow = void 0;
+                    var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
+                    var follow = void 0;
 
-                if ($.trim(task[3]) === 'y') {
-                    follow = true;
+                    if ($.trim(task[3]) === 'y') {
+                        follow = true;
+                    } else {
+                        follow = false;
+                    }
+
+                    var zadanie = {
+                        nazwa: $.trim(task[2]),
+                        start: startDate,
+                        trwa: trwanie,
+                        kto: $.trim(task[1]),
+                        timeline: parseInt(task[0]),
+                        follow: follow,
+                        complete: parseFloat(task[6])
+                    };
+
+                    if (trwanie === 0) {
+                        trwanie = 2 * 24 * 60 * 60 * 1000;
+                    }
+
+                    if (zadanie.start && zadanie.start < minTime || minTime === 0) {
+                        minTime = zadanie.start;
+                    }
+                    if (zadanie.start && zadanie.start + trwanie > maxTime) {
+                        maxTime = zadanie.start + trwanie;
+                    }
+
+                    tasks.push(zadanie);
+                    // console.log(zadanie.nazwa);
                 } else {
-                    follow = false;
+                    // fwx takinc care
+                    markedFW = task[3].split('#');
                 }
-
-                var zadanie = {
-                    nazwa: $.trim(task[2]),
-                    start: startDate,
-                    trwa: trwanie,
-                    kto: $.trim(task[1]),
-                    timeline: parseInt(task[0]),
-                    follow: follow,
-                    complete: parseFloat(task[6])
-                };
-
-                if (trwanie === 0) {
-                    trwanie = 2 * 24 * 60 * 60 * 1000;
-                }
-
-                if (zadanie.start && zadanie.start < minTime || minTime === 0) {
-                    minTime = zadanie.start;
-                }
-                if (zadanie.start && zadanie.start + trwanie > maxTime) {
-                    maxTime = zadanie.start + trwanie;
-                }
-
-                tasks.push(zadanie);
-                // console.log(zadanie.nazwa);
             }
         }
         //updateTasks();
