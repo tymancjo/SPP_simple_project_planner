@@ -29,6 +29,9 @@ var mapViewConf = {
 // clippoard array for all copu/paste functionality
 var clippoard = [];
 
+// the array of market FW for grid markings (Maciek FR) 
+var markedFW = [];
+
 
 $(document).ready(() => {
 
@@ -261,9 +264,11 @@ $(document).ready(() => {
 function resetData() {
     console.log('RESET');
     tasks = [];
+    markedFW = [];
     minTime = Number(moment(moment().format('YYYY-MM-DD')) - (moment().day() - 1) * 24 * 60 * 60 * 1000);
     maxTime = minTime;
     gant.html('');
+
     creategantt();
 }
 
@@ -456,23 +461,24 @@ function analyzedata(separator = '\t') {
     for (let line of inputData) {
         let task = line.split(separator);
 
-        console.log(task);
+        // console.log(task);
 
         if (task.length === 1) {
             task = line.split(',');
-            console.log('trying ,');
-            console.log(task);
+            // console.log('trying ,');
+            // console.log(task);
         }
 
         if (task.length === 1) {
             task = line.split(';');
-            console.log('trying ;');
-            console.log(task);
+            // console.log('trying ;');
+            // console.log(task);
         }
 
-        console.log((task.length));
+        // console.log((task.length));
 
         if (task.length > 1 && task[2]) {
+            if(task[2] !== '_fwx_'){
             // let startDate = Number(Date.parse(task[4]));
             
             let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
@@ -511,7 +517,10 @@ function analyzedata(separator = '\t') {
 
             tasks.push(zadanie);
             // console.log(zadanie.nazwa);
+        } else { // fwx takinc care
+            markedFW = task[3].split('#');
         }
+    }
     }
     //updateTasks();
 }

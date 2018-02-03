@@ -359,5 +359,39 @@ function tasksToCsv() {
         outputStr += t.timeline + ', ' + t.kto + ', ' + t.nazwa + ', ' + follower + ', ' + moment(t.start).format('YYYY-MM-DD') + ', ' + Math.round(t.trwa / (1000 * 60 * 60 * 24 * 7)) + ', ' + t.complete + ' \n';
     }
 
+    outputStr += 'x,x,_fwx_,' + arrayToStringTT(markedFW);
+
     return outputStr;
+}
+
+function arrayToStringTT(argument) {
+    // This function makes a string from array
+    var output = '';
+    if (argument.length) {
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = argument[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var item = _step.value;
+
+                output += item + "#";
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+    }
+    return output;
 }

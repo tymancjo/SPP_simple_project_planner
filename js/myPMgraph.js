@@ -19,6 +19,22 @@ function taskMasterFilter(task) {
 }
 
 
+function toogleFW(argument) {
+  // This function is about adding/removing clicked week from the markedFW array
+  if(markedFW.indexOf(argument) === -1){
+    markedFW.push(argument);
+    
+  } else {
+    markedFW.splice(markedFW.indexOf(argument), 1);
+  }
+
+      if(isMapView) {
+        mapView();
+      } else { 
+        normalView();
+      }
+}
+
 function mapToggleText() {
     // this function shows or hide all text in mapView
     let textIn = $('.mapBar-in-text');
@@ -159,19 +175,25 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         let fyear = moment(thegridtime + 24*60*60*1000).year();
         let currentweek = moment().week();
         let currentyear = moment().year();
+
+        // lets check if this week is in marked weeks array 
+        let checkString = 'FW:'+fweek+'Y:'+fyear;
+
+
+        if(markedFW.indexOf(checkString) !== -1) {
+            ganthtml += `<div class="map-gant-grid-col map-col-marked" style="width: ${width};">`;
         
-        if (fweek === currentweek && fyear === currentyear) {
-            ganthtml += `<div class="map-gant-grid-col map-current-week" style="width: ${width};">
-                    FW${fweek}</div>`;
+        } else if (fweek === currentweek && fyear === currentyear) {
+            ganthtml += `<div class="map-gant-grid-col map-current-week" style="width: ${width};">`;
 
         } else if ((fweek < currentweek && fyear === currentyear) || (fyear < currentyear)) {
-            ganthtml += `<div class="map-gant-grid-col map-past-week" style="width: ${width};">
-                        FW${fweek}</div>`;
+            ganthtml += `<div class="map-gant-grid-col map-past-week" style="width: ${width};">`;
 
         } else {
-            ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">
-                    FW${fweek}</div>`;
+            ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
+
+        ganthtml += `<button class="fw-btn" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
     }
 
     gridDiv.html(ganthtml);

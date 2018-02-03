@@ -20,6 +20,21 @@ function taskMasterFilter(task) {
     }
 }
 
+function toogleFW(argument) {
+    // This function is about adding/removing clicked week from the markedFW array
+    if (markedFW.indexOf(argument) === -1) {
+        markedFW.push(argument);
+    } else {
+        markedFW.splice(markedFW.indexOf(argument), 1);
+    }
+
+    if (isMapView) {
+        mapView();
+    } else {
+        normalView();
+    }
+}
+
 function mapToggleText() {
     // this function shows or hide all text in mapView
     var textIn = $('.mapBar-in-text');
@@ -183,13 +198,20 @@ function mapView() {
         var currentweek = moment().week();
         var currentyear = moment().year();
 
-        if (fweek === currentweek && fyear === currentyear) {
-            ganthtml += '<div class="map-gant-grid-col map-current-week" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
+        // lets check if this week is in marked weeks array 
+        var checkString = 'FW:' + fweek + 'Y:' + fyear;
+
+        if (markedFW.indexOf(checkString) !== -1) {
+            ganthtml += '<div class="map-gant-grid-col map-col-marked" style="width: ' + width + ';">';
+        } else if (fweek === currentweek && fyear === currentyear) {
+            ganthtml += '<div class="map-gant-grid-col map-current-week" style="width: ' + width + ';">';
         } else if (fweek < currentweek && fyear === currentyear || fyear < currentyear) {
-            ganthtml += '<div class="map-gant-grid-col map-past-week" style="width: ' + width + ';">\n                        FW' + fweek + '</div>';
+            ganthtml += '<div class="map-gant-grid-col map-past-week" style="width: ' + width + ';">';
         } else {
-            ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">\n                    FW' + fweek + '</div>';
+            ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">';
         }
+
+        ganthtml += '<button class="fw-btn" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
     }
 
     gridDiv.html(ganthtml);

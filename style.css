@@ -437,6 +437,7 @@ content {
   z-index: 10;
   padding: 10px;
   padding-top: 20px;
+  pointer-events: none;
 }
 
 #mapGantGrid {
@@ -476,6 +477,19 @@ content {
   color: red;
 }
 
+.map-col-marked {
+  background-color: rgba(200,100,100,0.1);
+  /*border-right: 1px solid black;*/
+}
+
+.map-col-marked button {
+  color: red;
+}
+
+.fw-btn {
+  background: none;
+  border: none;
+}
 
 .map-gant-row {
   position: relative;
@@ -486,8 +500,11 @@ content {
   flex-shrink: 0;
   flex-grow: 0;
   width: 100%;
-
+  pointer-events: auto;
 }
+
+
+
 .mapView-milestone {
   position: relative;
   display: flex;
