@@ -59,7 +59,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
-    $('.map-gant-grid-col').css('font-size', textSize + 'px');
+    $('.FWbutton').css('font-size', textSize + 'px');
 }
 
 function mapView() {
@@ -84,12 +84,8 @@ function mapView() {
     var pp_per_week = widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7)); // in % per week  
 
     //figuring out Y scale
-    var px_per_task = spaceY / tasks.length; // figured out in pixels
-    var pp_per_task = 90 / tasks.length; // figured out in %
-
-    //lets now generate the graph for the tasks.
-    var ganthtml = '';
-    var t = 0;
+    //taking under consideration the taks that will be displayed only
+    var tasksToBeDisplayed = 0;
     var _iteratorNormalCompletion = true;
     var _didIteratorError = false;
     var _iteratorError = undefined;
@@ -99,17 +95,53 @@ function mapView() {
             var task = _step.value;
 
             if (taskMasterFilter(task)) {
-                var left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
+                tasksToBeDisplayed++;
+            }
+        }
+    } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+    } finally {
+        try {
+            if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+            }
+        } finally {
+            if (_didIteratorError) {
+                throw _iteratorError;
+            }
+        }
+    }
+
+    var px_per_task = spaceY / tasksToBeDisplayed; // figured out in pixels
+    var pp_per_task = 90 / tasksToBeDisplayed; // figured out in %
+    // previous solution
+    // let px_per_task = spaceY / tasks.length; // figured out in pixels
+    // let pp_per_task = 90 / tasks.length; // figured out in %
+
+    //lets now generate the graph for the tasks.
+    var ganthtml = '';
+    var t = 0;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+        for (var _iterator2 = tasks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var _task = _step2.value;
+
+            if (taskMasterFilter(_task)) {
+                var left = Math.round(100 * ((_task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
                 var height = Math.round(80 * pp_per_task) / 100 + "%";
                 var margin = Math.round(10 * pp_per_task) / 100 + "%";
                 var box_style = 'mapView-task';
 
-                if (task.follow) {
+                if (_task.follow) {
                     box_style += ' mapView-linked';
                 }
 
-                var _width = Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week) / 100 + "%";
-                if (task.trwa === 0) {
+                var _width = Math.round(100 * Math.floor(_task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week) / 100 + "%";
+                if (_task.trwa === 0) {
                     _width = 0.5 * pp_per_week + "%";
                     box_style = 'mapView-milestone';
                 }
@@ -128,7 +160,7 @@ function mapView() {
                 var outDivTxt = '';
 
                 if (fontSize > 1) {
-                    inDivTxt = task.nazwa;
+                    inDivTxt = _task.nazwa;
                     // console.log(inDivTxt.length, fontSize);
 
                     var pixelWidth = 0.01 * parseFloat(_width) * spaceX;
@@ -157,16 +189,16 @@ function mapView() {
             t++; // here we increase the index (as we use for of loop)
         } // end of looping over tasks
     } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
             }
         } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
+            if (_didIteratorError2) {
+                throw _iteratorError2;
             }
         }
     }
@@ -211,7 +243,7 @@ function mapView() {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">';
         }
 
-        ganthtml += '<button class="fw-btn" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
+        ganthtml += '<button class="fw-btn FWbutton" style="font-size: ' + (mapViewConf.fontSize + 'px') + '" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
     }
 
     gridDiv.html(ganthtml);

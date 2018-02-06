@@ -363,11 +363,11 @@ function creategantt() {
         fontsize = Math.max(5, Math.min(fontsize, 16));
 
         if (tasks[t].follow) {
-            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift"        onClick="breakTask(' + t + ')">#\n                    </button></div>';
+            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift" onClick="breakTask(' + t + ')">#\n                    </button></div>';
         } else if (t > 0) {
-            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n        onClick="shiftTask(' + t + ',-1)"> < </button>\n        <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button><button class="btn-shift"        onClick="linkTask(' + t + ')">!\n        </button></div>';
+            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n                    onClick="shiftTask(' + t + ',-1)"> < </button>\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button><button class="btn-shift" onClick="linkTask(' + t + ')">!\n                    </button></div>';
         } else {
-            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n        onClick="shiftTask(' + t + ',-1)"> < </button>\n        <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button></div>';
+            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',-1)"> < </button>\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button></div>';
         }
 
         var divId = "main-" + t;
@@ -474,7 +474,7 @@ function analyzedata() {
                         start: startDate,
                         trwa: trwanie,
                         kto: $.trim(task[1]),
-                        timeline: parseInt(task[0]),
+                        timeline: task[0] + '', // as string
                         follow: follow,
                         complete: parseFloat(task[6])
                     };
