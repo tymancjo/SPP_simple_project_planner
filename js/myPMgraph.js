@@ -4,17 +4,36 @@ function taskMasterFilter(task) {
     // This function checks if the task meets the master search criteria
     // its abut if any of the string meets the master search string
 
+    let inputIsArray = false;
     let searchString = $('#masterFilter').val().trim();
+    
+    // checking if searchstring is a list of strings
+    // separated by comma ,
+    
+    if (searchString.indexOf(',') !== -1){
+        console.log('search is set of questions');
+        inputIsArray = true;
+        searchString = searchString.split(',');
+    }
 
+    
     if (searchString) {
         let taskStringify = JSON.stringify(task);
-        if (taskStringify.indexOf(searchString) !== -1) {
+        
+        if (!inputIsArray && taskStringify.indexOf(searchString) !== -1) {
             return true;
-        } else {
-            return false;
+
+        } else if(inputIsArray){
+            
+            for (let question of searchString){
+                if(question.trim() !== '' && taskStringify.indexOf(question.trim()) !== -1){
+                    return true;
+                }
+            }
+            return false;  // if non of the question fits
         }
     } else {
-        return true;
+        return true; // if the search string is empty 
     }
 }
 
@@ -59,7 +78,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
-    $('.map-gant-grid-col').css('font-size', textSize + 'px');
+    $('.FWbutton').css('font-size', textSize + 'px');
 }
 
 function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
@@ -80,8 +99,19 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
 
     //figuring out Y scale
-    let px_per_task = spaceY / tasks.length; // figured out in pixels
-    let pp_per_task = 90 / tasks.length; // figured out in %
+    //taking under consideration the taks that will be displayed only
+    let tasksToBeDisplayed = 0;
+    for (let task of tasks){
+        if (taskMasterFilter(task)){
+            tasksToBeDisplayed++;
+        }
+    }
+
+    let px_per_task = spaceY / tasksToBeDisplayed; // figured out in pixels
+    let pp_per_task = 90 / tasksToBeDisplayed; // figured out in %
+    // previous solution
+    // let px_per_task = spaceY / tasks.length; // figured out in pixels
+    // let pp_per_task = 90 / tasks.length; // figured out in %
 
     //lets now generate the graph for the tasks.
     let ganthtml = '';
@@ -193,7 +223,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
 
-        ganthtml += `<button class="fw-btn" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
+        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
     }
 
     gridDiv.html(ganthtml);

@@ -50,7 +50,7 @@ $(document).ready(function () {
         }
         mouseX = evt.pageX;
         mouseY = evt.pageY;
-        updateModal(mouseX + 20, mouseY + 20, hooveredtask);
+        updateModal(mouseX + 20, mouseY + 20, hooveredtask, hooveredtaskId);
 
         if (dragItem) {
             if (!isDragged) {
@@ -264,13 +264,14 @@ function resetData() {
 
 function updateModal(x, y) {
     var task = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var taskId = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
 
     // lest instert the text
     if (task) {
         // console.log('having task');
         $('#mouseModal').css('padding', '10px');
 
-        $('#modal-name').html('<h2>' + task.nazwa + '</h2>');
+        $('#modal-name').html('<h2>' + taskId + ': ' + task.nazwa + '</h2>');
         $('#modal-owner').html('<h2>' + task.kto + '</h2>');
         $('#modal-start').text('From: ' + moment(task.start).format('DD-MM-YYYY'));
         $('#modal-end').text('To: ' + moment(task.start + task.trwa).format('DD-MM-YYYY'));
@@ -363,11 +364,11 @@ function creategantt() {
         fontsize = Math.max(5, Math.min(fontsize, 16));
 
         if (tasks[t].follow) {
-            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift"        onClick="breakTask(' + t + ')">#\n                    </button></div>';
+            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift" onClick="breakTask(' + t + ')">#\n                    </button></div>';
         } else if (t > 0) {
-            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n        onClick="shiftTask(' + t + ',-1)"> < </button>\n        <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button><button class="btn-shift"        onClick="linkTask(' + t + ')">!\n        </button></div>';
+            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n                    onClick="shiftTask(' + t + ',-1)"> < </button>\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button><button class="btn-shift" onClick="linkTask(' + t + ')">!\n                    </button></div>';
         } else {
-            preBtn = '<div class="btn-wrapper"><button class="btn-shift"\n        onClick="shiftTask(' + t + ',-1)"> < </button>\n        <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button></div>';
+            preBtn = '<div class="btn-wrapper">\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',-1)"> < </button>\n                    <button class="btn-shift" onClick="shiftTask(' + t + ',1)"> > </button></div>';
         }
 
         var divId = "main-" + t;
@@ -474,7 +475,7 @@ function analyzedata() {
                         start: startDate,
                         trwa: trwanie,
                         kto: $.trim(task[1]),
-                        timeline: parseInt(task[0]),
+                        timeline: task[0] + '', // as string
                         follow: follow,
                         complete: parseFloat(task[6])
                     };

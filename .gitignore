@@ -5,3 +5,5 @@ test.html
 .babelrc (1)
 node_modules
 *.json
+*.sublime-project
+*.sublime-workspace
