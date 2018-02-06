@@ -6,17 +6,56 @@ function taskMasterFilter(task) {
     // This function checks if the task meets the master search criteria
     // its abut if any of the string meets the master search string
 
+    var inputIsArray = false;
     var searchString = $('#masterFilter').val().trim();
+
+    // checking if searchstring is a list of strings
+    // separated by comma ,
+
+    if (searchString.indexOf(',') !== -1) {
+        console.log('search is set of questions');
+        inputIsArray = true;
+        searchString = searchString.split(',');
+    }
 
     if (searchString) {
         var taskStringify = JSON.stringify(task);
-        if (taskStringify.indexOf(searchString) !== -1) {
+
+        if (!inputIsArray && taskStringify.indexOf(searchString) !== -1) {
             return true;
-        } else {
-            return false;
+        } else if (inputIsArray) {
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+
+                for (var _iterator = searchString[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var question = _step.value;
+
+                    if (question.trim() !== '' && taskStringify.indexOf(question.trim()) !== -1) {
+                        return true;
+                    }
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            return false; // if non of the question fits
         }
     } else {
-        return true;
+        return true; // if the search string is empty 
     }
 }
 
@@ -86,29 +125,29 @@ function mapView() {
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
     var tasksToBeDisplayed = 0;
-    var _iteratorNormalCompletion = true;
-    var _didIteratorError = false;
-    var _iteratorError = undefined;
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
 
     try {
-        for (var _iterator = tasks[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-            var task = _step.value;
+        for (var _iterator2 = tasks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+            var task = _step2.value;
 
             if (taskMasterFilter(task)) {
                 tasksToBeDisplayed++;
             }
         }
     } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
+        _didIteratorError2 = true;
+        _iteratorError2 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion && _iterator.return) {
-                _iterator.return();
+            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                _iterator2.return();
             }
         } finally {
-            if (_didIteratorError) {
-                throw _iteratorError;
+            if (_didIteratorError2) {
+                throw _iteratorError2;
             }
         }
     }
@@ -122,13 +161,13 @@ function mapView() {
     //lets now generate the graph for the tasks.
     var ganthtml = '';
     var t = 0;
-    var _iteratorNormalCompletion2 = true;
-    var _didIteratorError2 = false;
-    var _iteratorError2 = undefined;
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
 
     try {
-        for (var _iterator2 = tasks[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-            var _task = _step2.value;
+        for (var _iterator3 = tasks[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+            var _task = _step3.value;
 
             if (taskMasterFilter(_task)) {
                 var left = Math.round(100 * ((_task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
@@ -189,16 +228,16 @@ function mapView() {
             t++; // here we increase the index (as we use for of loop)
         } // end of looping over tasks
     } catch (err) {
-        _didIteratorError2 = true;
-        _iteratorError2 = err;
+        _didIteratorError3 = true;
+        _iteratorError3 = err;
     } finally {
         try {
-            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                _iterator2.return();
+            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                _iterator3.return();
             }
         } finally {
-            if (_didIteratorError2) {
-                throw _iteratorError2;
+            if (_didIteratorError3) {
+                throw _iteratorError3;
             }
         }
     }
@@ -243,7 +282,7 @@ function mapView() {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">';
         }
 
-        ganthtml += '<button class="fw-btn FWbutton" style="font-size: ' + (mapViewConf.fontSize + 'px') + '" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
+        ganthtml += '<button class="fw-btn FWbutton" style="font-size: ' + (mapViewConf.fontSize + 'px') + '" title="starts: ' + moment(thegridtime).format('DD-MM-YYYY') + '" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
     }
 
     gridDiv.html(ganthtml);

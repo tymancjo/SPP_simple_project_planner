@@ -49,7 +49,7 @@ $(document).ready(() => {
         }
         mouseX = evt.pageX;
         mouseY = evt.pageY;
-        updateModal(mouseX + 20, mouseY + 20, hooveredtask);
+        updateModal(mouseX + 20, mouseY + 20, hooveredtask, hooveredtaskId);
 
         if (dragItem) {
             if (!isDragged) {
@@ -272,13 +272,13 @@ function resetData() {
     creategantt();
 }
 
-function updateModal(x, y, task = null) {
+function updateModal(x, y, task = null, taskId = null) {
     // lest instert the text
     if (task) {
         // console.log('having task');
         $('#mouseModal').css('padding', '10px');
 
-        $('#modal-name').html('<h2>' + task.nazwa + '</h2>');
+        $('#modal-name').html('<h2>'+taskId+': ' + task.nazwa + '</h2>');
         $('#modal-owner').html('<h2>' + task.kto + '</h2>');
         $('#modal-start').text('From: ' + moment(task.start).format('DD-MM-YYYY'));
         $('#modal-end').text('To: ' + moment(task.start + task.trwa).format('DD-MM-YYYY'));

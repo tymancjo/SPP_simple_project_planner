@@ -4,17 +4,36 @@ function taskMasterFilter(task) {
     // This function checks if the task meets the master search criteria
     // its abut if any of the string meets the master search string
 
+    let inputIsArray = false;
     let searchString = $('#masterFilter').val().trim();
+    
+    // checking if searchstring is a list of strings
+    // separated by comma ,
+    
+    if (searchString.indexOf(',') !== -1){
+        console.log('search is set of questions');
+        inputIsArray = true;
+        searchString = searchString.split(',');
+    }
 
+    
     if (searchString) {
         let taskStringify = JSON.stringify(task);
-        if (taskStringify.indexOf(searchString) !== -1) {
+        
+        if (!inputIsArray && taskStringify.indexOf(searchString) !== -1) {
             return true;
-        } else {
-            return false;
+
+        } else if(inputIsArray){
+            
+            for (let question of searchString){
+                if(question.trim() !== '' && taskStringify.indexOf(question.trim()) !== -1){
+                    return true;
+                }
+            }
+            return false;  // if non of the question fits
         }
     } else {
-        return true;
+        return true; // if the search string is empty 
     }
 }
 
@@ -204,7 +223,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
 
-        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
+        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
     }
 
     gridDiv.html(ganthtml);
