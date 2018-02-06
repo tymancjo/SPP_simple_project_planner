@@ -15,14 +15,14 @@ https://youtu.be/0YB62mltaMs
 I never find myself very into typical Project Management apps like MS Project. So having a bit of time I put together very simple app in JS/HTML/CSS that helps plan task in very visual way. It's based on planning tasks in week by week 'resolution'.
 
 ## TODO's / Feature Request List
-+ timeline as string - for easy filtering - done
++ *timeline as string - for easy filtering - done*
 + Always jump with edit selection to pasted task
 + Load/Save/Console available also in mapView
 + Make vie mode selection presistent with load/save/console operations
 + Batch edit of tasks
 + mapView fit to screen height or Fix task height option
 + Master Filtering with many strings (comma separated)
-+ Task height update when fultering applayed - done
++ *Task height update when fultering applayed - done*
 + map View top grig FW number shos date on hover
 + Add refresh view to map View toolbar
 
