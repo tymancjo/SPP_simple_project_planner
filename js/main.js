@@ -87,14 +87,6 @@ $(document).ready(() => {
 
     $('#masterFilter').on('keyup change input', mapView);
 
-    // Binding to jquery-ui draggable
-
-    // $('#taskInfo').draggable({
-    //     handle: "h3"
-    // });
-
-
-
     // Button bindings to actions
     gant.click(() => {
         if (hooveredtask) {
