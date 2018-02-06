@@ -21,10 +21,10 @@ I never find myself very into typical Project Management apps like MS Project. S
 + Make vie mode selection presistent with load/save/console operations
 + Batch edit of tasks
 + mapView fit to screen height or Fix task height option
-+ Master Filtering with many strings (comma separated)
++ *Master Filtering with many strings (comma separated) - done*
 + *Task height update when fultering applayed - done*
-+ map View top grig FW number shos date on hover
-+ Add refresh view to map View toolbar
++ *map View top grig FW number shos date on hover - done*
++ *Add refresh view to map View toolbar - done*
 
 ## Quick Use Guide
 ### Main working window
