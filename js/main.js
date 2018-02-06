@@ -23,7 +23,11 @@ var dY;
 // object to keep the mapView config
 var mapViewConf = {
     fontSize: 14,
-    textVisible: true
+    textVisible: true,
+    pixelHeight: false,
+    minpx_per_task: 25,
+    maxpx_per_task: 100,
+
 };
 
 // clippoard array for all copu/paste functionality
