@@ -167,11 +167,12 @@ function insertClippoard(position, srcArr = clippoard) {
     // this function insert tasks form source into given posioton in tasks
     position = parseInt(position);
 
-    if (clippoard.length > 0) {
+    if (srcArr.length > 0) {
         tasks.splice.apply(tasks, [position, 0].concat(srcArr));
+        showTaskDetail(position);
+        srcArr = [];
         return true;
     } else {
-        srcArr = [];
         return false;
     }
 }

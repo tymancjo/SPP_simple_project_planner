@@ -11,16 +11,22 @@
 
 <body>
     <div class="full-page-close is-hidden" id="mapViewX">
+        view:
         <div class="row">
             <button class="console-btn text-center" id="refresh" onclick="mapView();">Refresh</button>
             <button class="console-btn text-center" id="closemap">Close View</button>
         </div>
-        text config
+        view height style:
+        <div class="row">
+            <button class="console-btn text-center" id="shrink" onclick="mapViewConf.pixelHeight = 0; mapView();">Fit</button>
+            <button class="console-btn text-center" id="scrolled" onclick="mapViewConf.pixelHeight = 1; mapView();">Long</button>
+        </div>
+        text size:
         <div class="row">
             <button class="console-btn text-center" onclick="mapTextSizeUp(1/1.2)">-</button>
             <button class="console-btn text-center" onclick="mapTextSizeUp(1.2)">+</button>
         </div>
-        <button class="console-btn text-center" id="map-hide-text" onclick="mapToggleText()">show hide</button>
+        <button class="console-btn text-center" id="map-hide-text" onclick="mapToggleText()">show / hide</button>
         <hr> filter
         <input type="text" id="masterFilter">
 

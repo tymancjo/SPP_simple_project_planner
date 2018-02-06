@@ -23,7 +23,11 @@ var dY;
 // object to keep the mapView config
 var mapViewConf = {
     fontSize: 14,
-    textVisible: true
+    textVisible: true,
+    pixelHeight: false,
+    minpx_per_task: 25,
+    maxpx_per_task: 100,
+
 };
 
 // clippoard array for all copu/paste functionality
@@ -82,14 +86,6 @@ $(document).ready(() => {
     });
 
     $('#masterFilter').on('keyup change input', mapView);
-
-    // Binding to jquery-ui draggable
-
-    // $('#taskInfo').draggable({
-    //     handle: "h3"
-    // });
-
-
 
     // Button bindings to actions
     gant.click(() => {

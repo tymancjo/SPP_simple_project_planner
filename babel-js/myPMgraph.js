@@ -153,6 +153,10 @@ function mapView() {
     }
 
     var px_per_task = spaceY / tasksToBeDisplayed; // figured out in pixels
+    // checking if the px size is more than the required min and les than the max
+    // jus some clipping to the value
+    px_per_task = Math.min(Math.max(px_per_task, mapViewConf.minpx_per_task), mapViewConf.maxpx_per_task);
+
     var pp_per_task = 90 / tasksToBeDisplayed; // figured out in %
     // previous solution
     // let px_per_task = spaceY / tasks.length; // figured out in pixels
@@ -173,6 +177,13 @@ function mapView() {
                 var left = Math.round(100 * ((_task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
                 var height = Math.round(80 * pp_per_task) / 100 + "%";
                 var margin = Math.round(10 * pp_per_task) / 100 + "%";
+
+                // we override the above height and margin if the config is to use px
+                if (mapViewConf.pixelHeight) {
+                    height = Math.round(100 * px_per_task) / 100 + "px";
+                    margin = Math.round(20 * px_per_task) / 100 + "px";
+                }
+
                 var box_style = 'mapView-task';
 
                 if (_task.follow) {
@@ -199,7 +210,7 @@ function mapView() {
                 var outDivTxt = '';
 
                 if (fontSize > 1) {
-                    inDivTxt = _task.nazwa;
+                    inDivTxt = '<span style="font-size: 75%;">' + t + ':</span> ' + _task.nazwa;
                     // console.log(inDivTxt.length, fontSize);
 
                     var pixelWidth = 0.01 * parseFloat(_width) * spaceX;
@@ -227,6 +238,8 @@ function mapView() {
             } // end of IF for the master search string match
             t++; // here we increase the index (as we use for of loop)
         } // end of looping over tasks
+
+        // here we add extra row if working in pixel mode to get breath at the bottom
     } catch (err) {
         _didIteratorError3 = true;
         _iteratorError3 = err;
@@ -240,6 +253,10 @@ function mapView() {
                 throw _iteratorError3;
             }
         }
+    }
+
+    if (mapViewConf.pixelHeight) {
+        ganthtml += '<div id="bottom-close-row" class="map-gant-row" style="height: ' + mapViewConf.maxpx_per_task + 'px"></div>';
     }
 
     targetDiv.html(ganthtml); // this puth the tasks to screen
