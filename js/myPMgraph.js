@@ -59,7 +59,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
-    $('.map-gant-grid-col').css('font-size', textSize + 'px');
+    $('.FWbutton').css('font-size', textSize + 'px');
 }
 
 function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
@@ -80,8 +80,19 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
 
     //figuring out Y scale
-    let px_per_task = spaceY / tasks.length; // figured out in pixels
-    let pp_per_task = 90 / tasks.length; // figured out in %
+    //taking under consideration the taks that will be displayed only
+    let tasksToBeDisplayed = 0;
+    for (let task of tasks){
+        if (taskMasterFilter(task)){
+            tasksToBeDisplayed++;
+        }
+    }
+
+    let px_per_task = spaceY / tasksToBeDisplayed; // figured out in pixels
+    let pp_per_task = 90 / tasksToBeDisplayed; // figured out in %
+    // previous solution
+    // let px_per_task = spaceY / tasks.length; // figured out in pixels
+    // let pp_per_task = 90 / tasks.length; // figured out in %
 
     //lets now generate the graph for the tasks.
     let ganthtml = '';
@@ -193,7 +204,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
 
-        ganthtml += `<button class="fw-btn" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
+        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
     }
 
     gridDiv.html(ganthtml);

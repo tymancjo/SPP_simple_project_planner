@@ -23,7 +23,7 @@ var dY;
 // object to keep the mapView config
 var mapViewConf = {
     fontSize: 14,
-    textVisible: true 
+    textVisible: true
 };
 
 // clippoard array for all copu/paste functionality
@@ -51,10 +51,10 @@ $(document).ready(() => {
         mouseY = evt.pageY;
         updateModal(mouseX + 20, mouseY + 20, hooveredtask);
 
-        if(dragItem){
-            if(!isDragged){
-                dX = mouseX - parseInt($(dragItem).css('left')); 
-                dY = mouseY - parseInt($(dragItem).css('top')); 
+        if (dragItem) {
+            if (!isDragged) {
+                dX = mouseX - parseInt($(dragItem).css('left'));
+                dY = mouseY - parseInt($(dragItem).css('top'));
             }
 
             isDragged = true;
@@ -64,11 +64,11 @@ $(document).ready(() => {
 
     });
 
-    $('#info-box-bar').mousedown(()=>{
+    $('#info-box-bar').mousedown(() => {
         dragItem = "#taskInfo";
     });
-    
-    $(document).mouseup(()=>{
+
+    $(document).mouseup(() => {
         dragItem = null;
         isDragged = false;
     });
@@ -169,12 +169,12 @@ $(document).ready(() => {
         creategantt();
     });
 
-    $('#mapview').click(()=>{
-      mapView();
+    $('#mapview').click(() => {
+        mapView();
     });
-    
-    $('#mapview_small_txt').click(()=>{
-      mapView(false, 1);
+
+    $('#mapview_small_txt').click(() => {
+        mapView(false, 1);
     });
 
     $('#closemap').click(normalView);
@@ -216,46 +216,46 @@ $(document).ready(() => {
     });
 
     // binding task copy/paste buttons
-    $('#task-edit-copy-one').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
-      clippoard = [];
-      grabTask(position, false, false);
-      redrawAll();
+    $('#task-edit-copy-one').click(() => {
+        let position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
+        grabTask(position, false, false);
+        redrawAll();
     });
 
-    $('#task-edit-copy-all').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
-      clippoard = [];
-      grabTask(position, true, false);
-      redrawAll();
+    $('#task-edit-copy-all').click(() => {
+        let position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
+        grabTask(position, true, false);
+        redrawAll();
     });
 
-    $('#task-edit-cut-one').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
-      clippoard = [];
-      grabTask(position, false, true);
-      redrawAll();
+    $('#task-edit-cut-one').click(() => {
+        let position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
+        grabTask(position, false, true);
+        redrawAll();
     });
 
-    $('#task-edit-cut-all').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
-      clippoard = [];
-      grabTask(position, true, true);
-      redrawAll();
+    $('#task-edit-cut-all').click(() => {
+        let position = $('#task-edit-apply').attr('targetId');
+        clippoard = [];
+        grabTask(position, true, true);
+        redrawAll();
     });
 
-    $('#task-edit-paste-above').click(()=>{
-      let position = $('#task-edit-apply').attr('targetId');
-      insertClippoard(position);
-      clippoard = [];
-      redrawAll();
+    $('#task-edit-paste-above').click(() => {
+        let position = $('#task-edit-apply').attr('targetId');
+        insertClippoard(position);
+        clippoard = [];
+        redrawAll();
     });
 
-    $('#task-edit-paste-below').click(()=>{
-      let position = parseInt($('#task-edit-apply').attr('targetId'));
-      insertClippoard(position + 1);
-      clippoard = [];
-      redrawAll();
+    $('#task-edit-paste-below').click(() => {
+        let position = parseInt($('#task-edit-apply').attr('targetId'));
+        insertClippoard(position + 1);
+        clippoard = [];
+        redrawAll();
     });
 
 
@@ -375,17 +375,17 @@ function creategantt() {
 
         if (tasks[t].follow) {
             preBtn = `<div class="btn-wrapper">
-                    <button class="btn-shift"        onClick="breakTask(${t})">#
+                    <button class="btn-shift" onClick="breakTask(${t})">#
                     </button></div>`;
         } else if (t > 0) {
             preBtn = `<div class="btn-wrapper"><button class="btn-shift"
-        onClick="shiftTask(${t},-1)"> < </button>
-        <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button><button class="btn-shift"        onClick="linkTask(${t})">!
-        </button></div>`;
+                    onClick="shiftTask(${t},-1)"> < </button>
+                    <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button><button class="btn-shift" onClick="linkTask(${t})">!
+                    </button></div>`;
         } else {
-            preBtn = `<div class="btn-wrapper"><button class="btn-shift"
-        onClick="shiftTask(${t},-1)"> < </button>
-        <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button></div>`;
+            preBtn = `<div class="btn-wrapper">
+                    <button class="btn-shift" onClick="shiftTask(${t},-1)"> < </button>
+                    <button class="btn-shift" onClick="shiftTask(${t},1)"> > </button></div>`;
         }
 
 
@@ -445,11 +445,11 @@ function creategantt() {
 
     // lets higlight selected if needed
     if (isEdit) {
-      let position = parseInt($('#task-edit-apply').attr('targetId'));
-      higlightTaskDiv(position);
+        let position = parseInt($('#task-edit-apply').attr('targetId'));
+        higlightTaskDiv(position);
     } else {
-      clearHiglight();
-    } 
+        clearHiglight();
+    }
 
 
 
@@ -478,49 +478,49 @@ function analyzedata(separator = '\t') {
         // console.log((task.length));
 
         if (task.length > 1 && task[2]) {
-            if(task[2] !== '_fwx_'){
-            // let startDate = Number(Date.parse(task[4]));
-            
-            let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+            if (task[2] !== '_fwx_') {
+                // let startDate = Number(Date.parse(task[4]));
 
-            console.log('data: ', startDate);
+                let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
 
-            let trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
-            let follow;
+                console.log('data: ', startDate);
 
-            if ($.trim(task[3]) === 'y') {
-                follow = true;
-            } else {
-                follow = false;
+                let trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
+                let follow;
+
+                if ($.trim(task[3]) === 'y') {
+                    follow = true;
+                } else {
+                    follow = false;
+                }
+
+
+
+
+
+                let zadanie = {
+                    nazwa: $.trim(task[2]),
+                    start: startDate,
+                    trwa: trwanie,
+                    kto: $.trim(task[1]),
+                    timeline: task[0] + '', // as string
+                    follow: follow,
+                    complete: parseFloat(task[6]),
+                };
+
+                if (trwanie === 0) {
+                    trwanie = (2 * 24 * 60 * 60 * 1000);
+                }
+
+                if ((zadanie.start && zadanie.start < minTime) || minTime === 0) { minTime = zadanie.start; }
+                if (zadanie.start && zadanie.start + trwanie > maxTime) { maxTime = zadanie.start + trwanie; }
+
+                tasks.push(zadanie);
+                // console.log(zadanie.nazwa);
+            } else { // fwx takinc care
+                markedFW = task[3].split('#');
             }
-
-
-
-
-
-            let zadanie = {
-                nazwa: $.trim(task[2]),
-                start: startDate,
-                trwa: trwanie,
-                kto: $.trim(task[1]),
-                timeline: parseInt(task[0]),
-                follow: follow,
-                complete: parseFloat(task[6]),
-            };
-
-            if (trwanie === 0) {
-                trwanie = (2 * 24 * 60 * 60 * 1000);
-            }
-
-            if ((zadanie.start && zadanie.start < minTime) || minTime === 0) { minTime = zadanie.start; }
-            if (zadanie.start && zadanie.start + trwanie > maxTime) { maxTime = zadanie.start + trwanie; }
-
-            tasks.push(zadanie);
-            // console.log(zadanie.nazwa);
-        } else { // fwx takinc care
-            markedFW = task[3].split('#');
         }
-    }
     }
     //updateTasks();
 }

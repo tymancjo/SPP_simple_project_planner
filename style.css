@@ -10,10 +10,16 @@
   padding: 0;
   box-sizing: border-box;
   font-family: helvetica, "Roboto" , sans-serif;
+  transition: all 250ms ease-in-out;
+  
 }
 
 body {
   background-color: darkgray;
+}
+
+.vue-div {
+  transition: all 250ms ease-in-out;
 }
 
 .full-page-close {
@@ -342,6 +348,7 @@ content {
   padding: 10px;
   overflow: hidden;
   box-shadow: 0 2px 15px black;
+  transition: none;
 }
 
 .modal input[type="text"] {
