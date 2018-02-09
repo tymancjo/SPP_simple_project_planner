@@ -246,6 +246,9 @@ $(document).ready(function () {
         clippoard = [];
         redrawAll();
     });
+
+    // trying to get data from URL
+    tasksUrl(1); // if it will be there we will process it else it stays empty
 });
 
 function resetData() {
@@ -454,11 +457,11 @@ function analyzedata() {
                 if (task[2] !== '_fwx_') {
                     // let startDate = Number(Date.parse(task[4]));
 
-                    var startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+                    var startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).startOf('day').valueOf();
 
                     console.log('data: ', startDate);
 
-                    var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
+                    var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000);
                     var follow = void 0;
 
                     if ($.trim(task[3]) === 'y') {

@@ -255,6 +255,9 @@ $(document).ready(() => {
     });
 
 
+    // trying to get data from URL
+    tasksUrl(1); // if it will be there we will process it else it stays empty
+
 });
 
 function resetData() {
@@ -477,11 +480,11 @@ function analyzedata(separator = '\t') {
             if (task[2] !== '_fwx_') {
                 // let startDate = Number(Date.parse(task[4]));
 
-                let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+                let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).startOf('day').valueOf();
 
                 console.log('data: ', startDate);
 
-                let trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
+                let trwanie = Number((task[5] * 7 * 24 * 60 * 60 * 1000) + (60 * 60 * 1000));
                 let follow;
 
                 if ($.trim(task[3]) === 'y') {

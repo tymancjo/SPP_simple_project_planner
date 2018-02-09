@@ -313,13 +313,14 @@ function updateTasks() {
         }
         if (tasks[t].start <= minTime) {
             var currentTaskStart = tasks[t].start;
-            var currentTaskDay = moment(currentTaskStart).day();
+            var currentTaskDay = moment(currentTaskStart).startOf('day').day();
             // console.log('the day is: ',currentTaskDay);
 
             minTime = currentTaskStart - (currentTaskDay - 1) * 24 * 60 * 60 * 1000; // to start grids on mondays
         }
 
         var trwanie = tasks[t].trwa;
+
         if (trwanie === 0) {
             trwanie = 2 * 24 * 60 * 60 * 1000;
         }
