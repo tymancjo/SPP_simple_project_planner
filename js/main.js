@@ -255,6 +255,9 @@ $(document).ready(() => {
     });
 
 
+    // trying to get data from URL
+    tasksUrl(1); // if it will be there we will process it else it stays empty
+
 });
 
 function resetData() {
