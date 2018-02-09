@@ -320,6 +320,7 @@ function updateTasks() {
         }
 
         var trwanie = tasks[t].trwa;
+
         if (trwanie === 0) {
             trwanie = 2 * 24 * 60 * 60 * 1000;
         }

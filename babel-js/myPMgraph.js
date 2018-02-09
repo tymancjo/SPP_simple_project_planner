@@ -179,7 +179,7 @@ function mapView() {
                 // let left = Math.round(100 * ((task.start - minTime)) * pp_per_ms) / 100 + "%";
 
                 // let left = Math.round(100 * ( moment(task.start).diff(moment(minTime), 'weeks'))* pp_per_week) / 100 + "%";
-                var left = moment(_task.start).diff(moment(minTime), 'weeks') * pp_per_week + "%";
+                var left = moment(_task.start).diff(moment(minTime), 'days') / 7 * pp_per_week + "%";
 
                 var height = Math.round(80 * pp_per_task) / 100 + "%";
                 var margin = Math.round(10 * pp_per_task) / 100 + "%";
@@ -199,7 +199,7 @@ function mapView() {
                 // let width = (Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week)) / 100 + "%";
                 var _width = (moment(_task.trwa).weeks() - 1) * pp_per_week + "%";
 
-                if (_task.trwa === 0) {
+                if (_task.trwa <= 60 * 60 * 1000) {
                     _width = 0.5 * pp_per_week + "%";
                     box_style = 'mapView-milestone';
                 }

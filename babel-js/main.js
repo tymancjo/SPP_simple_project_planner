@@ -458,7 +458,7 @@ function analyzedata() {
 
                     console.log('data: ', startDate);
 
-                    var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000);
+                    var trwanie = Number(task[5] * 7 * 24 * 60 * 60 * 1000 + 60 * 60 * 1000);
                     var follow = void 0;
 
                     if ($.trim(task[3]) === 'y') {
