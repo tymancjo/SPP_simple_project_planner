@@ -96,7 +96,8 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     //figuring out x scale
     let px_per_ms = spaceX / (maxTime - minTime); // figured out in pixels
     let pp_per_ms = (widthpercent / (maxTime - minTime)); // in % per ms
-    let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
+    // let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
+    let pp_per_week = Math.round(100 * widthpercent / (moment(maxTime).diff(moment(minTime), 'weeks'))) / 100; // in % per week  
 
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
@@ -124,7 +125,13 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     let t = 0;
     for (let task of tasks) {
         if (taskMasterFilter(task)) {
-            let left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
+            // let left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
+            // let left = Math.round(100 * ((task.start - minTime)) * pp_per_ms) / 100 + "%";
+            
+            // let left = Math.round(100 * ( moment(task.start).diff(moment(minTime), 'weeks'))* pp_per_week) / 100 + "%";
+            let left = moment(task.start).diff(moment(minTime), 'weeks') * pp_per_week + "%";
+            
+
             let height = Math.round(80 * pp_per_task) / 100 + "%";
             let margin = Math.round(10 * pp_per_task) / 100 + "%";
 
@@ -141,7 +148,9 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
                 box_style += ' mapView-linked';
             }
 
-            let width = (Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week)) / 100 + "%";
+            // let width = (Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week)) / 100 + "%";
+            let width = (moment(task.trwa).weeks() - 1) * pp_per_week + "%";
+            
             if (task.trwa === 0) {
                 width = 0.5 * pp_per_week + "%";
                 box_style = 'mapView-milestone';
@@ -211,7 +220,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     // Now lets work over the FiscalWeek grid system
     // we know from above the size of single week mark
     // let width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
-    let width = (Math.round(100 * pp_per_week)) / 100 + "%";
+    let width = pp_per_week + "%";
 
     // now we figure out how many weeks we need to draw
     // we will draw few more
@@ -219,8 +228,32 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
 
     // lets now draw the grid by divs
     ganthtml = '';
+    
+    let thegridtime = moment(minTime);
+    let oldgridtime = moment(minTime).subtract(7, 'days');
+
     for (let i = 0; i < w; i++) {
-        let thegridtime = minTime + i * (7 * 24 * 60 * 60 * 1000);
+
+        
+        // some quick hacky fix for not being at the monday
+
+        // if(moment(thegridtime).day() == 0){
+        //     // adding one day
+        //     thegridtime += 1 * 24 * 60 * 60 * 1000;
+        // } else if(moment(thegridtime).day() > 1){
+        //     thegridtime -= (moment(thegridtime).day() - 1) * 24 * 60 * 60 * 1000;
+        // }
+
+        let weekWidthTime = thegridtime - oldgridtime;
+        console.log('week delta: ', moment(weekWidthTime).days());
+
+        // width = Math.round( 100 * ( weekWidthTime * pp_per_ms )) / 100; 
+        // width += '%';
+
+        console.log(width);
+        
+        
+
         let fweek = moment(thegridtime).week();
         let fyear = moment(thegridtime + 24*60*60*1000).year();
         let currentweek = moment().week();
@@ -244,7 +277,13 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         }
 
         ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
-    }
+    
+    // increasing time stamp
+    
+    oldgridtime = moment(thegridtime);
+    thegridtime.add(7,'days');
+    // thegridtime +=  (7 * 24 * 60 * 60 * 1000);
+    } // end of looping over the grid weeks
 
     gridDiv.html(ganthtml);
     $('.map-gant-grid-col').css('font-size', mapViewConf.fontSize + 'px'); // and set the marks font size

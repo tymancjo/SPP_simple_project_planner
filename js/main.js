@@ -477,7 +477,7 @@ function analyzedata(separator = '\t') {
             if (task[2] !== '_fwx_') {
                 // let startDate = Number(Date.parse(task[4]));
 
-                let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).valueOf();
+                let startDate = moment(task[4], ["DD-MM-YYYY", "YYYY-MM-DD"]).startOf('day').valueOf();
 
                 console.log('data: ', startDate);
 
