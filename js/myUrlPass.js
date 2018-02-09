@@ -8,7 +8,7 @@ function tasksUrl(getit=false) {
 			// this function returns compressed tasks to a url tahat can be sent to someone
 			let thisUrl = window.location.href.split('?')[0];  // grabbing the base adress
 			let urlData = LZString.compressToEncodedURIComponent(JSON.stringify({tasks: tasks}));
-			
+					
 			// cearing console
 			dataconsole.val(thisUrl + '?tasks=' + urlData);
 			dataconsole.select();
@@ -39,6 +39,8 @@ function tasksUrl(getit=false) {
 				let localTasks = JSON.parse(LZString.decompressFromEncodedURIComponent(tasksString)).tasks;
 				tasks = localTasks;
 				redrawAll();
+				let cleanUrl = window.location.pathname;
+				window.history.pushState("object or string", "Title", cleanUrl);	
 				return true;
 			
 			} else {

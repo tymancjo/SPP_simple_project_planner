@@ -42,6 +42,8 @@ function tasksUrl() {
 			var localTasks = JSON.parse(LZString.decompressFromEncodedURIComponent(tasksString)).tasks;
 			tasks = localTasks;
 			redrawAll();
+			var cleanUrl = window.location.pathname;
+			window.history.pushState("object or string", "Title", cleanUrl);
 			return true;
 		} else {
 			return false;
