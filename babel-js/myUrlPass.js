@@ -8,10 +8,30 @@ function tasksUrl() {
 
 
 	if (!getit) {
-		// this function returns compressed tasks to a url tahat can be sent to someone
-		var thisUrl = window.location.href.split('?')[0]; // grabbing the base adress
-		var urlData = LZString.compressToEncodedURIComponent(JSON.stringify({ tasks: tasks }));
-		return thisUrl + '?tasks=' + urlData;
+		if (tasks.length) {
+			// this function returns compressed tasks to a url tahat can be sent to someone
+			var thisUrl = window.location.href.split('?')[0]; // grabbing the base adress
+			var urlData = LZString.compressToEncodedURIComponent(JSON.stringify({ tasks: tasks }));
+
+			// cearing console
+			dataconsole.val(thisUrl + '?tasks=' + urlData);
+			dataconsole.select();
+			try {
+				var successful = document.execCommand('copy');
+				var msg = successful ? 'successful' : 'unsuccessful';
+				console.log('Copying text command was ' + msg);
+				if (successful) {
+					alert('Link is copied to clippboard');
+					dataconsole.val('');
+				}
+				return true;
+			} catch (err) {
+				console.log('Oops, unable to copy');
+				return false;
+			}
+		} else {
+			return false;
+		}
 	} else {
 		var _thisUrl = window.location.href; // grabbing the base adress
 		var url = new URL(_thisUrl);
