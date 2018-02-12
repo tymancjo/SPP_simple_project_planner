@@ -19,7 +19,7 @@ I never find myself very into typical Project Management apps like MS Project. S
   + For easy sharing project plans with a link (you need to send the key as well)
   + All data are encrypted and the key is never transmitted (need to be kept by user)
   + The key is set by user on generating share link
-  + Share messahe is created for used and copied to clippboard
+  + Share message is created for used and copied to clippboard
 + Possible to work from zero in map view mode
 + If clippboard is empty new tasks is created at the beggining of timeline when paste above/below clicked
 + Major fixes for map view clean display
