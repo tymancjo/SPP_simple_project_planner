@@ -18,8 +18,8 @@
         </div>
         view height style:
         <div class="row">
-            <button class="console-btn text-center" id="shrink" onclick="mapViewConf.pixelHeight = 0; mapView();">Fit</button>
-            <button class="console-btn text-center" id="scrolled" onclick="mapViewConf.pixelHeight = 1; mapView();">Long</button>
+            <button class="console-btn text-center" id="shrink" onclick="mapViewConf.pixelHeight = 0; $('#mapGantArea').addClass('fit'); mapView(); ">Fit</button>
+            <button class="console-btn text-center" id="scrolled" onclick="mapViewConf.pixelHeight = 1; $('#mapGantArea').removeClass('fit'); mapView(); ">Long</button>
         </div>
         text size:
         <div class="row">
@@ -32,8 +32,9 @@
 
     </div>
     <div class="full-page-view is-hidden" id="mapViewDiv">
-        <div id="mapGantArea"></div>
+        <div id="mapGantArea" class="fit"></div>
         <div id="mapGantGrid"></div>
+        
     </div>
     <div class="page">
         <header>
@@ -138,6 +139,7 @@
     <script src="jslib/jquery-3.2.1.min.js" charset="utf-8"></script>
     <script src="jslib/moment.js" charset="utf-8"></script>
     <script src="jslib/lz-string.js" charset="utf-8"></script>
+    <script src="jslib/crypto-js.js" charset="utf-8"></script>
     <script src="js/myPMgraph.js" charset="utf-8"></script>
     <script src="js/myPM.js" charset="utf-8"></script>
     <script src="js/myUrlPass.js" charset="utf-8"></script>
