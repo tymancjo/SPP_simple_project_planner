@@ -50,6 +50,7 @@ I never find myself very into typical Project Management apps like MS Project. S
   + you can open saved file
   + you can save the file you have (it's saved as a CSV file with just list of tasks)
   + The text console allows to paste data (i.e. from excel) and analyze it or to bring all your work to it and than allows you to copy from it (if you need it for some reason)
+  + You can save the project to encypted repo on server and get link to share it
 + on the top is a toolbar
   + you can zoom out the entire Gantt to get a better look
   + you can change the timescale (shrink/extend all in X directon)
@@ -62,17 +63,26 @@ This working mode was a key idea - to have a one look to entire project. Here we
 + allows some modification work
   + you click on task and you get the same Modification Window as in Main working window
   + the changes are reflected live on the map view
-  + You cannot Add task in Map View (at least for now)
+  + You can Add task in Map View using the edit window.
+    + If no task is copied to clippoard the paste above/below buttons create a new task accordingly.
   + You have a quick adjust menu (right top - hover there) where you can:
     - Adjust the text size
     - Hide/show the text
+    - switch for Fit on screen / Long (scrollable) view.
     - Use global filter to show display only some tasks
     - get back to Main Work View
+    - refresh the view (if you find such a need)
++ on the left is a drawer it will get visible when you move your mouse there - click the bar with |||
+ + you can open saved file
+ + you can save the file you have (it's saved as a CSV file with just list of tasks)
+ + The text console allows to paste data (i.e. from excel) and analyze it or to bring all your work to it and than allows you to copy from it (if you need it for some reason)
+ + You can save the project to encypted repo on server and get link to share it
 
 ### Map View Global FIlter
 
 This text input box allows fo display only tasks that contain the entered text in the name, owner, timeline etc.
-It's case sensitive.
+It's case sensitive. 
+You can use multiple search strings by sepparating it by commas.
 
 
 
