@@ -2,7 +2,7 @@
 Simple Project Planner - Gantt based planning tool in JS
 
 Tool for simple Task & Time planner 
-version: 0.3 (I think)
+version: 0.5 (I think)
 
 live version: http://tomasztomanek.pl/pub/spp/
 
@@ -14,13 +14,26 @@ https://youtu.be/0YB62mltaMs
 
 I never find myself very into typical Project Management apps like MS Project. So having a bit of time I put together very simple app in JS/HTML/CSS that helps plan task in very visual way. It's based on planning tasks in week by week 'resolution'.
 
+## Latest Update Changelog
++ On server repository to keep tasks
+  + For easy sharing project plans with a link (you need to send the key as well)
+  + All data are encrypted and the key is never transmitted (need to be kept by user)
+  + The key is set by user on generating share link
+  + Share messahe is created for used and copied to clippboard
++ Possible to work from zero in map view mode
++ If clippboard is empty new tasks is created at the beggining of timeline when paste above/below clicked
++ Major fixes for map view clean display
++ Fix for FireFox issue with the draggable edit window
+
+ 
+
 ## TODO's / Feature Request List
 + *timeline as string - for easy filtering - done*
-+ Always jump with edit selection to pasted task
-+ Load/Save/Console available also in mapView
++ *Always jump with edit selection to pasted task - done*
++ *Load/Save/Console available also in mapView - done*
 + Make vie mode selection presistent with load/save/console operations
 + Batch edit of tasks
-+ mapView fit to screen height or Fix task height option
++ *mapView fit to screen height or Fix task height option -  done*
 + *Master Filtering with many strings (comma separated) - done*
 + *Task height update when fultering applayed - done*
 + *map View top grig FW number shos date on hover - done*
