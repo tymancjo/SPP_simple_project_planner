@@ -144,8 +144,9 @@ function readCsvDataToTasks() {
             dataconsole.val('');
             dataconsole.val(fr.result);
             analyzedata(',');
-            updateTasks();
-            creategantt();
+            // updateTasks();
+            // creategantt();
+            redrawAll();
         };
 
         fr.readAsText(file);
