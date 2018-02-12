@@ -106,6 +106,30 @@ function mapView() {
     var maxfont = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 14;
     var widthpercent = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 85;
 
+    if (tasks.length === 0) {
+        // mapView is called with no tasks
+
+        // we check min time if zero we set for now
+        if (minTime === 0) {
+            minTime = moment().startOf('day').valueOf();
+        }
+        // we add new blank taks to start with
+        var zadanie = {
+            nazwa: 'New Task',
+            start: minTime,
+            trwa: 7 * 24 * 60 * 60 * 1000, // one week 
+            kto: 'none',
+            timeline: '', // as string
+            follow: false,
+            complete: 0
+        };
+
+        tasks.push(zadanie);
+        updateTasks();
+        showTaskDetail(0);
+    } // end of adding first task and bring up edit if was empty
+
+
     //some assumed values
     var padding = 0;
 
@@ -120,8 +144,15 @@ function mapView() {
     //figuring out x scale
     var px_per_ms = spaceX / (maxTime - minTime); // figured out in pixels
     var pp_per_ms = widthpercent / (maxTime - minTime); // in % per ms
-    // let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
     var pp_per_week = Math.round(100 * widthpercent / moment(maxTime).diff(moment(minTime), 'weeks')) / 100; // in % per week  
+
+    // now we figure out how many weeks we need to draw
+    // we will draw few more
+    var w = 2 + Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
+
+    // as we want to have some space to breath
+    // we need to limit the max size of one week to 1/5 of the whole
+    pp_per_week = Math.min(pp_per_week, Math.round(100 * 100 / w) / 100);
 
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
@@ -166,6 +197,7 @@ function mapView() {
     //lets now generate the graph for the tasks.
     var ganthtml = '';
     var t = 0;
+
     var _iteratorNormalCompletion3 = true;
     var _didIteratorError3 = false;
     var _iteratorError3 = undefined;
@@ -175,10 +207,6 @@ function mapView() {
             var _task = _step3.value;
 
             if (taskMasterFilter(_task)) {
-                // let left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
-                // let left = Math.round(100 * ((task.start - minTime)) * pp_per_ms) / 100 + "%";
-
-                // let left = Math.round(100 * ( moment(task.start).diff(moment(minTime), 'weeks'))* pp_per_week) / 100 + "%";
                 var left = moment(_task.start).diff(moment(minTime), 'days') / 7 * pp_per_week + "%";
 
                 var height = Math.round(80 * pp_per_task) / 100 + "%";
@@ -196,7 +224,6 @@ function mapView() {
                     box_style += ' mapView-linked';
                 }
 
-                // let width = (Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week)) / 100 + "%";
                 var _width = (moment(_task.trwa).weeks() - 1) * pp_per_week + "%";
 
                 if (_task.trwa <= 60 * 60 * 1000) {
@@ -281,10 +308,6 @@ function mapView() {
     // let width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
     var width = pp_per_week + "%";
 
-    // now we figure out how many weeks we need to draw
-    // we will draw few more
-    var w = 2 + Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
-
     // lets now draw the grid by divs
     ganthtml = '';
 
@@ -345,7 +368,7 @@ function mapView() {
     $('#mapViewDiv').removeClass('is-hidden');
     $('#mapViewX').removeClass('is-hidden');
     $('.page').addClass('is-hidden');
-    $('.console').addClass('is-hidden');
+    $('.console').addClass('is-transparent');
 
     // lets higlight selected if needed
     if (isEdit) {
@@ -361,7 +384,7 @@ function normalView() {
     $('#mapViewX').addClass('is-hidden');
     $('#mapViewDiv').addClass('is-hidden');
     $('.page').removeClass('is-hidden');
-    $('.console').removeClass('is-hidden');
+    $('.console').removeClass('is-transparent');
     $('.console').addClass('is-closed');
     isMapView = false;
     creategantt();

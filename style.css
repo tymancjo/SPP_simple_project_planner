@@ -59,7 +59,12 @@ body {
   flex-direction: row;
   justify-content: flex-end;
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  opacity: 1;
 }
+
+.console:hover{
+  opacity: 1;
+} 
 
 
 
@@ -380,6 +385,7 @@ content {
   margin-left: -10%;
   margin-top: -10px;
   margin-bottom: 10px;
+  min-height: 20px;
   padding: 5px 10px;
   text-align: center;
 }
@@ -422,6 +428,10 @@ content {
   display: none;
 }
 
+.is-transparent {
+  opacity: 0;
+}
+
 
 /* css for map View boxes */
 
@@ -431,8 +441,9 @@ content {
   right: 0;
   width: 100vw;
   height: 100vh;
-  overflow: auto;
-  background: radial-gradient(white, lightgray)
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: radial-gradient(white, lightgray);
 }
 
 #mapGantArea {
@@ -441,13 +452,19 @@ content {
   left: 0;
   top: 0;
   width: 100vw;
-  height: 100%;
+  min-height: calc( 100% - 20px );
   z-index: 10;
   padding: 10px;
   padding-top: 0;
   margin-top: 20px;
+  overflow-y: hidden;
+  overflow-x: hidden;
   /*pointer-events: none;*/
 }
+
+#mapGantArea.fit {
+  height: calc( 100% - 20px );
+} 
 
 #mapGantGrid {
   display: flex;
@@ -459,6 +476,7 @@ content {
   height: 100%;
   padding: 0 10px 0 10px;
   z-index: 5;
+  overflow-y: auto;
   background-color: transparent;
 }
 
@@ -500,6 +518,7 @@ content {
 .fw-btn {
   background: none;
   border: none;
+  cursor: pointer;
 }
 
 .map-gant-row {

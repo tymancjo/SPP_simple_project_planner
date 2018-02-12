@@ -164,6 +164,20 @@ function insertClippoard(position) {
         srcArr = [];
         return true;
     } else {
+        // here we will create a new task if nothing in clippboard        
+        var zadanie = {
+            nazwa: 'New Task',
+            start: minTime,
+            trwa: 7 * 24 * 60 * 60 * 1000, // one week
+            kto: 'none',
+            timeline: '', // as string
+            follow: false,
+            complete: 0
+        };
+
+        tasks.splice(position, 0, zadanie);
+
+        showTaskDetail(position);
         return false;
     }
 }

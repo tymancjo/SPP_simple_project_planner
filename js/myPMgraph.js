@@ -6,31 +6,31 @@ function taskMasterFilter(task) {
 
     let inputIsArray = false;
     let searchString = $('#masterFilter').val().trim();
-    
+
     // checking if searchstring is a list of strings
     // separated by comma ,
-    
-    if (searchString.indexOf(',') !== -1){
+
+    if (searchString.indexOf(',') !== -1) {
         console.log('search is set of questions');
         inputIsArray = true;
         searchString = searchString.split(',');
     }
 
-    
+
     if (searchString) {
         let taskStringify = JSON.stringify(task);
-        
+
         if (!inputIsArray && taskStringify.indexOf(searchString) !== -1) {
             return true;
 
-        } else if(inputIsArray){
-            
-            for (let question of searchString){
-                if(question.trim() !== '' && taskStringify.indexOf(question.trim()) !== -1){
+        } else if (inputIsArray) {
+
+            for (let question of searchString) {
+                if (question.trim() !== '' && taskStringify.indexOf(question.trim()) !== -1) {
                     return true;
                 }
             }
-            return false;  // if non of the question fits
+            return false; // if non of the question fits
         }
     } else {
         return true; // if the search string is empty 
@@ -39,19 +39,19 @@ function taskMasterFilter(task) {
 
 
 function toogleFW(argument) {
-  // This function is about adding/removing clicked week from the markedFW array
-  if(markedFW.indexOf(argument) === -1){
-    markedFW.push(argument);
-    
-  } else {
-    markedFW.splice(markedFW.indexOf(argument), 1);
-  }
+    // This function is about adding/removing clicked week from the markedFW array
+    if (markedFW.indexOf(argument) === -1) {
+        markedFW.push(argument);
 
-      if(isMapView) {
+    } else {
+        markedFW.splice(markedFW.indexOf(argument), 1);
+    }
+
+    if (isMapView) {
         mapView();
-      } else { 
+    } else {
         normalView();
-      }
+    }
 }
 
 function mapToggleText() {
@@ -67,7 +67,7 @@ function mapTextSizeUp(factor) {
     // this functions bump text size in map view
     let textIn = $('.mapBar-in-text');
     let textOut = $('.mapBar-out-text');
-    
+
     let textSize = mapViewConf.fontSize;
 
     textSize = Math.round(factor * textSize);
@@ -82,6 +82,29 @@ function mapTextSizeUp(factor) {
 }
 
 function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
+    if(tasks.length === 0){ // mapView is called with no tasks
+        
+        // we check min time if zero we set for now
+        if(minTime === 0) {
+            minTime = moment().startOf('day').valueOf();
+        }
+        // we add new blank taks to start with
+        let zadanie = {
+                    nazwa: 'New Task',
+                    start: minTime,
+                    trwa: (7 * 24 * 60 * 60 * 1000 ), // one week 
+                    kto: 'none',
+                    timeline: '', // as string
+                    follow: false,
+                    complete: 0,
+                };
+
+        tasks.push(zadanie);
+        updateTasks();
+        showTaskDetail(0); 
+    } // end of adding first task and bring up edit if was empty
+
+
     //some assumed values
     let padding = 0;
 
@@ -96,14 +119,21 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     //figuring out x scale
     let px_per_ms = spaceX / (maxTime - minTime); // figured out in pixels
     let pp_per_ms = (widthpercent / (maxTime - minTime)); // in % per ms
-    // let pp_per_week = (widthpercent / ((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7))); // in % per week  
     let pp_per_week = Math.round(100 * widthpercent / (moment(maxTime).diff(moment(minTime), 'weeks'))) / 100; // in % per week  
 
+    // now we figure out how many weeks we need to draw
+    // we will draw few more
+    let w = 2 + Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
+
+    // as we want to have some space to breath
+    // we need to limit the max size of one week to 1/5 of the whole
+    pp_per_week = Math.min(pp_per_week, Math.round(100*100 / w) / 100);
+    
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
     let tasksToBeDisplayed = 0;
-    for (let task of tasks){
-        if (taskMasterFilter(task)){
+    for (let task of tasks) {
+        if (taskMasterFilter(task)) {
             tasksToBeDisplayed++;
         }
     }
@@ -112,7 +142,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     // checking if the px size is more than the required min and les than the max
     // jus some clipping to the value
     px_per_task = Math.min(Math.max(px_per_task, mapViewConf.minpx_per_task), mapViewConf.maxpx_per_task);
-    
+
 
 
     let pp_per_task = 90 / tasksToBeDisplayed; // figured out in %
@@ -123,14 +153,13 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     //lets now generate the graph for the tasks.
     let ganthtml = '';
     let t = 0;
+
+
+
     for (let task of tasks) {
         if (taskMasterFilter(task)) {
-            // let left = Math.round(100 * ((task.start - minTime) / (1000 * 60 * 60 * 24)) * (pp_per_week / 7)) / 100 + "%";
-            // let left = Math.round(100 * ((task.start - minTime)) * pp_per_ms) / 100 + "%";
-            
-            // let left = Math.round(100 * ( moment(task.start).diff(moment(minTime), 'weeks'))* pp_per_week) / 100 + "%";
             let left = (moment(task.start).diff(moment(minTime), 'days') / 7) * pp_per_week + "%";
-            
+
 
             let height = Math.round(80 * pp_per_task) / 100 + "%";
             let margin = Math.round(10 * pp_per_task) / 100 + "%";
@@ -148,9 +177,8 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
                 box_style += ' mapView-linked';
             }
 
-            // let width = (Math.round(100 * Math.floor(task.trwa / (1000 * 60 * 60 * 24 * 7)) * pp_per_week)) / 100 + "%";
             let width = (moment(task.trwa).weeks() - 1) * pp_per_week + "%";
-            
+
             if (task.trwa <= (60 * 60 * 1000)) {
                 width = 0.5 * pp_per_week + "%";
                 box_style = 'mapView-milestone';
@@ -171,7 +199,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             let outDivTxt = '';
 
             if (fontSize > 1) {
-                inDivTxt =`<span style="font-size: 75%;">${t}:</span> ${task.nazwa}`;
+                inDivTxt = `<span style="font-size: 75%;">${t}:</span> ${task.nazwa}`;
                 // console.log(inDivTxt.length, fontSize);
 
                 let pixelWidth = 0.01 * parseFloat(width) * spaceX;
@@ -199,13 +227,13 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
 
         } // end of IF for the master search string match
         t++; // here we increase the index (as we use for of loop)
-        
+
     } // end of looping over tasks
 
     // here we add extra row if working in pixel mode to get breath at the bottom
-        if (mapViewConf.pixelHeight){
-            ganthtml += `<div id="bottom-close-row" class="map-gant-row" style="height: ${mapViewConf.maxpx_per_task}px"></div>`;
-        }
+    if (mapViewConf.pixelHeight) {
+        ganthtml += `<div id="bottom-close-row" class="map-gant-row" style="height: ${mapViewConf.maxpx_per_task}px"></div>`;
+    }
 
 
     targetDiv.html(ganthtml); // this puth the tasks to screen
@@ -222,19 +250,17 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     // let width = Math.round((7 * 24 * 60 * 60 * 1000) * pp_per_ms) + "%";
     let width = pp_per_week + "%";
 
-    // now we figure out how many weeks we need to draw
-    // we will draw few more
-    let w = 2 + Math.round((maxTime - minTime) / (1000 * 60 * 60 * 24 * 7));
+    
 
     // lets now draw the grid by divs
     ganthtml = '';
-    
+
     let thegridtime = moment(minTime);
     let oldgridtime = moment(minTime).subtract(7, 'days');
 
     for (let i = 0; i < w; i++) {
 
-        
+
         // some quick hacky fix for not being at the monday
 
         // if(moment(thegridtime).day() == 0){
@@ -251,21 +277,21 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         // width += '%';
 
         console.log(width);
-        
-        
+
+
 
         let fweek = moment(thegridtime).week();
-        let fyear = moment(thegridtime + 24*60*60*1000).year();
+        let fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         let currentweek = moment().week();
         let currentyear = moment().year();
 
         // lets check if this week is in marked weeks array 
-        let checkString = 'FW:'+fweek+'Y:'+fyear;
+        let checkString = 'FW:' + fweek + 'Y:' + fyear;
 
 
-        if(markedFW.indexOf(checkString) !== -1) {
+        if (markedFW.indexOf(checkString) !== -1) {
             ganthtml += `<div class="map-gant-grid-col map-col-marked" style="width: ${width};">`;
-        
+
         } else if (fweek === currentweek && fyear === currentyear) {
             ganthtml += `<div class="map-gant-grid-col map-current-week" style="width: ${width};">`;
 
@@ -277,12 +303,12 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         }
 
         ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
-    
-    // increasing time stamp
-    
-    oldgridtime = moment(thegridtime);
-    thegridtime.add(7,'days');
-    // thegridtime +=  (7 * 24 * 60 * 60 * 1000);
+
+        // increasing time stamp
+
+        oldgridtime = moment(thegridtime);
+        thegridtime.add(7, 'days');
+        // thegridtime +=  (7 * 24 * 60 * 60 * 1000);
     } // end of looping over the grid weeks
 
     gridDiv.html(ganthtml);
@@ -293,15 +319,15 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     $('#mapViewDiv').removeClass('is-hidden');
     $('#mapViewX').removeClass('is-hidden');
     $('.page').addClass('is-hidden');
-    $('.console').addClass('is-hidden');
+    $('.console').addClass('is-transparent');
 
     // lets higlight selected if needed
     if (isEdit) {
-      let position = parseInt($('#task-edit-apply').attr('targetId'));
-      higlightTaskDiv(position);
+        let position = parseInt($('#task-edit-apply').attr('targetId'));
+        higlightTaskDiv(position);
     } else {
-      clearHiglight();
-    } 
+        clearHiglight();
+    }
     isMapView = true;
 }
 
@@ -309,7 +335,7 @@ function normalView() {
     $('#mapViewX').addClass('is-hidden');
     $('#mapViewDiv').addClass('is-hidden');
     $('.page').removeClass('is-hidden');
-    $('.console').removeClass('is-hidden');
+    $('.console').removeClass('is-transparent');
     $('.console').addClass('is-closed');
     isMapView = false;
     creategantt();

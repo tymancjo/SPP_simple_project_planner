@@ -40,11 +40,11 @@ function higlightTaskDiv(position, aClass = "selected-div") {
 }
 
 function clearHiglight(aClass = "selected-div") {
-  // this function clears up all divs highlights
+    // this function clears up all divs highlights
 
-  $(".mapView-task").removeClass(aClass);
-  $(".mapView-milestone").removeClass(aClass);
-  $(".gant-bar").removeClass(aClass);
+    $(".mapView-task").removeClass(aClass);
+    $(".mapView-milestone").removeClass(aClass);
+    $(".gant-bar").removeClass(aClass);
 
 }
 
@@ -53,7 +53,7 @@ function showTaskDetail(taskId) {
     // gathering some data for edit window :)
     let task = tasks[taskId];
     clearHiglight();
-    higlightTaskDiv(taskId);  // higlighting the edited task
+    higlightTaskDiv(taskId); // higlighting the edited task
 
     $('input[name="taskName"]').val(task.nazwa);
     $('input[name="taskOwner"]').val(task.kto);
@@ -173,6 +173,20 @@ function insertClippoard(position, srcArr = clippoard) {
         srcArr = [];
         return true;
     } else {
+        // here we will create a new task if nothing in clippboard        
+            let zadanie = {
+                    nazwa: 'New Task',
+                    start: minTime,
+                    trwa: (7 * 24 * 60 * 60 * 1000 ), // one week
+                    kto: 'none',
+                    timeline: '', // as string
+                    follow: false,
+                    complete: 0,
+                };
+
+            tasks.splice(position, 0, zadanie);
+
+        showTaskDetail(position);
         return false;
     }
 }
@@ -191,9 +205,9 @@ function grabTask(position, followers = false, delSrc = false, target = clippoar
     let totalAffected = 1; // the number of tasks we will grab
 
     let grabbed = Object.assign({}, tasks[position]); // grabbing the first task as clone object
-    grabbed.follow = false;  // making the task not a fllower - to paste in position.
+    grabbed.follow = false; // making the task not a fllower - to paste in position.
 
-    target.push(grabbed); 
+    target.push(grabbed);
 
     for (let t = position + 1; t < tasks.length; t++) {
         console.log(t);
@@ -205,7 +219,7 @@ function grabTask(position, followers = false, delSrc = false, target = clippoar
 
         } else if (tasks[t].follow) {
             console.log('grab 02');
-            if(delSrc) {tasks[t].follow = false;} // making the below task fixed to date 
+            if (delSrc) { tasks[t].follow = false; } // making the below task fixed to date 
             break;
         } else {
             console.log('grab 03');
@@ -324,7 +338,7 @@ function updateTasks() {
         }
 
         let trwanie = tasks[t].trwa;
-        
+
         if (trwanie === 0) {
             trwanie = (2 * 24 * 60 * 60 * 1000);
         }
@@ -365,18 +379,18 @@ function tasksToCsv() {
         outputStr += `${t.timeline}, ${t.kto}, ${t.nazwa}, ${follower}, ${moment(t.start).format('YYYY-MM-DD')}, ${Math.round(t.trwa/(1000*60*60*24*7))}, ${t.complete} \n`;
     }
 
-    outputStr += 'x,x,_fwx_,'+ arrayToStringTT(markedFW);
+    outputStr += 'x,x,_fwx_,' + arrayToStringTT(markedFW);
 
     return outputStr;
 }
 
 function arrayToStringTT(argument) {
-  // This function makes a string from array
-  let output = '';
-  if(argument.length){
-    for(let item of argument) {
-        output += item + "#";
+    // This function makes a string from array
+    let output = '';
+    if (argument.length) {
+        for (let item of argument) {
+            output += item + "#";
+        }
     }
-  }
-  return output;
+    return output;
 }
