@@ -47,7 +47,7 @@ function tasksUrl(getit=false) {
 	}
 }
 
-function copy(data) {
+function copy(data, message=true) {
 	// this function copy the console to system clippboard
 			dataconsole.val(data);
 			dataconsole.select();
@@ -56,7 +56,9 @@ function copy(data) {
 				    var msg = successful ? 'successful' : 'unsuccessful';
 				    console.log('Copying text command was ' + msg);
 				    if (successful){
-				    	// alert('Link is copied to clippboard');
+				    	if (message) {
+				    		alert('Link is copied to clippboard');
+							}
 						dataconsole.val('');
 						return true;
 				    } 
@@ -97,8 +99,29 @@ function dataToServer(server, dataSrc, uid) {
 	    // prepare the message with the sharing data
 	    let link = window.location.href + '?spp=' + uid;
 	    let message = 'You can share the project:\n link: '+link+'\n key: '+ key; 
-	    copy(message);
-	    alert(message + '\n This was copied to clippboard');
+
+	    copy(message, false);
+
+	    xhr.onreadystatechange = function() {
+  		
+  		console.log('xhr.readyState= ', xhr.readyState);
+  		console.log('xhr.status= ', xhr.status);
+
+  		if (xhr.readyState === 4 && xhr.status === 200) {
+    		
+    				console.log('successful');
+         			
+				    alert(message);
+				    
+      		}
+      		
+      			
+  		if (xhr.readyState === 4 && xhr.status === 0) {
+	       			console.log('failed');
+				    alert('Warning!\nCreating share repository was not possible!');
+			}
+
+		};
 
 	    } else {
 		alert('You need to provide a key vaule!');
@@ -161,3 +184,9 @@ function dataFromServer(target, uid) {
  }
 
 
+function echoApi(api) {
+	// this function is about to just call api and console log the response
+	$.get(api, (data) => {
+		console.log(data);
+    });
+}
