@@ -23,6 +23,7 @@ var dY;
 // object to keep the mapView config
 var mapViewConf = {
     fontSize: 14,
+    maxFWfontSize: 14,
     textVisible: true,
     pixelHeight: false,
     minpx_per_task: 25,

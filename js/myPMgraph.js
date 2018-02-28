@@ -78,6 +78,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
+    textSize = Math.min(textSize, mapViewConf.maxFWfontSize);
     $('.FWbutton').css('font-size', textSize + 'px');
 }
 
@@ -281,6 +282,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
 
 
         let fweek = moment(thegridtime).week();
+        let fq = moment(thegridtime).fquarter(1).quarter;
         let fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         let currentweek = moment().week();
         let currentyear = moment().year();
@@ -302,7 +304,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
 
-        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
+        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">Q${fq} FW${fweek}</button></div>`;
 
         // increasing time stamp
 
