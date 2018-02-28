@@ -4,6 +4,9 @@
 var dataconsole = $('#console-text');
 var gant = $('#gantarea');
 var tasks = [];
+var displayedtasks = [];
+var notdisplayedtasks = [];
+
 var skala = 1;
 var gantzoom = 1;
 var mouseX = 0;

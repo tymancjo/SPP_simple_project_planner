@@ -157,6 +157,11 @@ function mapView() {
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
     var tasksToBeDisplayed = 0;
+
+    // handling the array to be ready to make new project from displayed tasks
+    displayedtasks = []; // cleaniing up the array of displayed tasks
+    notdisplayedtasks = []; // cleaning the list of not displayed tasks
+
     var _iteratorNormalCompletion2 = true;
     var _didIteratorError2 = false;
     var _iteratorError2 = undefined;
@@ -167,6 +172,9 @@ function mapView() {
 
             if (taskMasterFilter(task)) {
                 tasksToBeDisplayed++;
+                displayedtasks.push(task);
+            } else {
+                notdisplayedtasks.push(task);
             }
         }
     } catch (err) {
@@ -331,7 +339,8 @@ function mapView() {
         // width = Math.round( 100 * ( weekWidthTime * pp_per_ms )) / 100; 
         // width += '%';
 
-        console.log(width);
+        // console.log(width);
+
 
         var fweek = moment(thegridtime).week();
         var fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
