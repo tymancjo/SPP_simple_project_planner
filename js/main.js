@@ -90,6 +90,7 @@ $(document).ready(() => {
     });
 
     $('#masterFilter').on('keyup change input', mapView);
+    $('#masterHiglight').on('keyup change input', mapView);
 
     // Button bindings to actions
     gant.click(() => {

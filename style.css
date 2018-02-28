@@ -452,7 +452,7 @@ content {
   left: 0;
   top: 0;
   width: 100vw;
-  min-height: calc( 100% - 20px );
+  min-height: calc( 100% - 35px );
   z-index: 10;
   padding: 10px;
   padding-top: 0;
@@ -584,6 +584,10 @@ content {
 
 .mapView-linked {
   background-color: #0fc9b3;
+}
+
+.mapView-highlighted {
+  background-color: red;
 }
 
 .map-after-task {

@@ -3,11 +3,14 @@
 // This is the display functions set fro myPM in JS
 
 function taskMasterFilter(task) {
+    var searchSource = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '#masterFilter';
+    var defaultOutput = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
     // This function checks if the task meets the master search criteria
     // its abut if any of the string meets the master search string
 
     var inputIsArray = false;
-    var searchString = $('#masterFilter').val().trim();
+    var searchString = $(searchSource).val().trim();
 
     // checking if searchstring is a list of strings
     // separated by comma ,
@@ -55,7 +58,7 @@ function taskMasterFilter(task) {
             return false; // if non of the question fits
         }
     } else {
-        return true; // if the search string is empty 
+        return defaultOutput; // if the search string is empty get back the def output
     }
 }
 
@@ -98,6 +101,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
+    textSize = Math.min(textSize, mapViewConf.maxFWfontSize);
     $('.FWbutton').css('font-size', textSize + 'px');
 }
 
@@ -214,7 +218,9 @@ function mapView() {
         for (var _iterator3 = tasks[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var _task = _step3.value;
 
-            if (taskMasterFilter(_task)) {
+
+            if (displayedtasks.indexOf(_task) != -1) {
+                // check if this task is in the array to be displayed
                 var left = moment(_task.start).diff(moment(minTime), 'days') / 7 * pp_per_week + "%";
 
                 var height = Math.round(80 * pp_per_task) / 100 + "%";
@@ -237,6 +243,10 @@ function mapView() {
                 if (_task.trwa <= 60 * 60 * 1000) {
                     _width = 0.5 * pp_per_week + "%";
                     box_style = 'mapView-milestone';
+                }
+
+                if (taskMasterFilter(_task, '#masterHiglight', false)) {
+                    box_style += ' mapView-highlighted';
                 }
 
                 // this is to do sizes and pos by pixels - may be usefull in future
@@ -343,6 +353,7 @@ function mapView() {
 
 
         var fweek = moment(thegridtime).week();
+        var fq = moment(thegridtime).fquarter(1).quarter;
         var fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         var currentweek = moment().week();
         var currentyear = moment().year();
@@ -360,7 +371,7 @@ function mapView() {
             ganthtml += '<div class="map-gant-grid-col" style="width: ' + width + ';">';
         }
 
-        ganthtml += '<button class="fw-btn FWbutton" style="font-size: ' + (mapViewConf.fontSize + 'px') + '" title="starts: ' + moment(thegridtime).format('DD-MM-YYYY') + '" onclick="toogleFW(\'' + checkString + '\')">FW' + fweek + '</button></div>';
+        ganthtml += '<button class="fw-btn FWbutton" style="font-size: ' + (mapViewConf.fontSize + 'px') + '" title="starts: ' + moment(thegridtime).format('DD-MM-YYYY') + '" onclick="toogleFW(\'' + checkString + '\')">Q' + fq + ' FW' + fweek + '</button></div>';
 
         // increasing time stamp
 
