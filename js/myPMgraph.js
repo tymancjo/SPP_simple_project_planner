@@ -133,9 +133,17 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
     let tasksToBeDisplayed = 0;
+
+    // handling the array to be ready to make new project from displayed tasks
+    displayedtasks = []; // cleaniing up the array of displayed tasks
+    notdisplayedtasks = []; // cleaning the list of not displayed tasks
+
     for (let task of tasks) {
         if (taskMasterFilter(task)) {
             tasksToBeDisplayed++;
+            displayedtasks.push(task);
+        } else {
+            notdisplayedtasks.push(task);
         }
     }
 
@@ -277,7 +285,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         // width = Math.round( 100 * ( weekWidthTime * pp_per_ms )) / 100; 
         // width += '%';
 
-        console.log(width);
+        // console.log(width);
 
 
 

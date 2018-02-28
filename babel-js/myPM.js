@@ -412,3 +412,11 @@ function arrayToStringTT(argument) {
     }
     return output;
 }
+
+function newFromVisible() {
+    // This function clear tasks and leave only the visible ones.
+    if (displayedtasks.length > 0) {
+        tasks = displayedtasks;
+        redrawAll();
+    }
+}
