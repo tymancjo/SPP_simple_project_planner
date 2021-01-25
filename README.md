@@ -4,7 +4,7 @@ Simple Project Planner - Gantt based planning tool in JS
 Tool for simple Task & Time planner 
 version: 0.3 (I think)
 
-live version: http://tomasztomanek.pl/pub/spp/
+live version: https://tymancjo.pl/spp/
 
 video demo: 
 https://youtu.be/nEgHjVBuFh0

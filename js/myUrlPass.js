@@ -14,7 +14,7 @@ function tasksUrl(getit=false) {
 			if(tasks.length){
 			// this function prepare coded server repo to share data
 				let urlData = JSON.stringify({tasks: tasks, markedFW: markedFW});
-				let serveradress = 'http://tomasztomanek.pl/pub/spp/api/';
+				let serveradress = 'https://tymancjo.pl/spp/api/';
 				dataToServer(serveradress, urlData, getUID());
 			}		
 			
@@ -32,7 +32,7 @@ function tasksUrl(getit=false) {
 
 			if (tasksString){
 				// if the spp is set in the adress proceed with data from server repo
-				dataFromServer('http://tomasztomanek.pl/pub/spp/api/', tasksString);
+				dataFromServer('https://tymancjo.pl/spp/api/', tasksString);
 
 				// clean up the url adress 
 				let cleanUrl = window.location.pathname;
