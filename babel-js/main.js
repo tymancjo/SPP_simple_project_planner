@@ -6,6 +6,9 @@
 var dataconsole = $('#console-text');
 var gant = $('#gantarea');
 var tasks = [];
+var displayedtasks = [];
+var notdisplayedtasks = [];
+
 var skala = 1;
 var gantzoom = 1;
 var mouseX = 0;
@@ -25,6 +28,7 @@ var dY;
 // object to keep the mapView config
 var mapViewConf = {
     fontSize: 14,
+    maxFWfontSize: 14,
     textVisible: true,
     pixelHeight: false,
     minpx_per_task: 25,
@@ -85,6 +89,7 @@ $(document).ready(function () {
     });
 
     $('#masterFilter').on('keyup change input', mapView);
+    $('#masterHiglight').on('keyup change input', mapView);
 
     // Button bindings to actions
     gant.click(function () {

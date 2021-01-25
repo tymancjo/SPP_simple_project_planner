@@ -30,6 +30,9 @@
         <hr> filter
         <input type="text" id="masterFilter">
 
+        <hr> higlight
+        <input type="text" id="masterHiglight">
+
     </div>
     <div class="full-page-view is-hidden" id="mapViewDiv">
         <div id="mapGantArea" class="fit"></div>
@@ -70,6 +73,7 @@
             </div>
             <button class="console-btn" id="savedata">Save to file</button>
             <button class="console-btn" id="resetdata">Start New Project</button>
+            <button class="console-btn" id="newfromvisible" onclick="newFromVisible();">Make New Project from Displayed</button>
             <hr>
             <h3> text console </h3>
             <textarea id="console-text" cols="65" rows="5"></textarea>
@@ -138,6 +142,7 @@
     </div>
     <script src="jslib/jquery-3.2.1.min.js" charset="utf-8"></script>
     <script src="jslib/moment.js" charset="utf-8"></script>
+    <script src="jslib/moment-fquarter.js" charset="utf-8"></script>
     <script src="jslib/lz-string.js" charset="utf-8"></script>
     <script src="jslib/crypto-js.js" charset="utf-8"></script>
     <script src="js/myPMgraph.js" charset="utf-8"></script>

@@ -47,6 +47,8 @@ function tasksUrl() {
 }
 
 function copy(data) {
+	var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
 	// this function copy the console to system clippboard
 	dataconsole.val(data);
 	dataconsole.select();
@@ -55,7 +57,9 @@ function copy(data) {
 		var msg = successful ? 'successful' : 'unsuccessful';
 		console.log('Copying text command was ' + msg);
 		if (successful) {
-			// alert('Link is copied to clippboard');
+			if (message) {
+				alert('Link is copied to clippboard');
+			}
 			dataconsole.val('');
 			return true;
 		}
@@ -95,8 +99,26 @@ function dataToServer(server, dataSrc, uid) {
 		// prepare the message with the sharing data
 		var link = window.location.href + '?spp=' + uid;
 		var message = 'You can share the project:\n link: ' + link + '\n key: ' + key;
-		copy(message);
-		alert(message + '\n This was copied to clippboard');
+
+		copy(message, false);
+
+		xhr.onreadystatechange = function () {
+
+			console.log('xhr.readyState= ', xhr.readyState);
+			console.log('xhr.status= ', xhr.status);
+
+			if (xhr.readyState === 4 && xhr.status === 200) {
+
+				console.log('successful');
+
+				alert(message);
+			}
+
+			if (xhr.readyState === 4 && xhr.status === 0) {
+				console.log('failed');
+				alert('Warning!\nCreating share repository was not possible!');
+			}
+		};
 	} else {
 		alert('You need to provide a key vaule!');
 	}
@@ -147,5 +169,12 @@ function dataFromServer(target, uid) {
 			alert('No data available under this link');
 			console.log('No data available');
 		}
+	});
+}
+
+function echoApi(api) {
+	// this function is about to just call api and console log the response
+	$.get(api, function (data) {
+		console.log(data);
 	});
 }

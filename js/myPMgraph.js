@@ -1,11 +1,11 @@
 // This is the display functions set fro myPM in JS
 
-function taskMasterFilter(task) {
+function taskMasterFilter(task, searchSource='#masterFilter', defaultOutput=true) {
     // This function checks if the task meets the master search criteria
     // its abut if any of the string meets the master search string
 
     let inputIsArray = false;
-    let searchString = $('#masterFilter').val().trim();
+    let searchString = $(searchSource).val().trim();
 
     // checking if searchstring is a list of strings
     // separated by comma ,
@@ -33,7 +33,7 @@ function taskMasterFilter(task) {
             return false; // if non of the question fits
         }
     } else {
-        return true; // if the search string is empty 
+        return defaultOutput; // if the search string is empty get back the def output
     }
 }
 
@@ -78,6 +78,7 @@ function mapTextSizeUp(factor) {
 
     textIn.css('font-size', textSize + 'px');
     textOut.css('font-size', textSize + 'px');
+    textSize = Math.min(textSize, mapViewConf.maxFWfontSize);
     $('.FWbutton').css('font-size', textSize + 'px');
 }
 
@@ -132,9 +133,17 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
     //figuring out Y scale
     //taking under consideration the taks that will be displayed only
     let tasksToBeDisplayed = 0;
+
+    // handling the array to be ready to make new project from displayed tasks
+    displayedtasks = []; // cleaniing up the array of displayed tasks
+    notdisplayedtasks = []; // cleaning the list of not displayed tasks
+
     for (let task of tasks) {
         if (taskMasterFilter(task)) {
             tasksToBeDisplayed++;
+            displayedtasks.push(task);
+        } else {
+            notdisplayedtasks.push(task);
         }
     }
 
@@ -157,7 +166,8 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
 
 
     for (let task of tasks) {
-        if (taskMasterFilter(task)) {
+        
+        if (displayedtasks.indexOf(task) != -1) { // check if this task is in the array to be displayed
             let left = (moment(task.start).diff(moment(minTime), 'days') / 7) * pp_per_week + "%";
 
 
@@ -177,6 +187,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
                 box_style += ' mapView-linked';
             }
 
+
             let width = (moment(task.trwa).weeks() - 1) * pp_per_week + "%";
 
             if (task.trwa <= (60 * 60 * 1000)) {
@@ -184,6 +195,9 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
                 box_style = 'mapView-milestone';
             }
 
+            if (taskMasterFilter(task, '#masterHiglight', false)) {
+                box_style += ' mapView-highlighted';
+            }
 
             // this is to do sizes and pos by pixels - may be usefull in future
             // let left = Math.round((task.start - minTime) * px_per_ms) + "px";
@@ -276,11 +290,12 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
         // width = Math.round( 100 * ( weekWidthTime * pp_per_ms )) / 100; 
         // width += '%';
 
-        console.log(width);
+        // console.log(width);
 
 
 
         let fweek = moment(thegridtime).week();
+        let fq = moment(thegridtime).fquarter(1).quarter;
         let fyear = moment(thegridtime + 24 * 60 * 60 * 1000).year();
         let currentweek = moment().week();
         let currentyear = moment().year();
@@ -302,7 +317,7 @@ function mapView(fulltext = true, maxfont = 14, widthpercent = 85) {
             ganthtml += `<div class="map-gant-grid-col" style="width: ${width};">`;
         }
 
-        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">FW${fweek}</button></div>`;
+        ganthtml += `<button class="fw-btn FWbutton" style="font-size: ${mapViewConf.fontSize + 'px'}" title="starts: ${moment(thegridtime).format('DD-MM-YYYY')}" onclick="toogleFW('${checkString}')">Q${fq} FW${fweek}</button></div>`;
 
         // increasing time stamp
 

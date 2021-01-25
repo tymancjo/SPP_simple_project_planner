@@ -452,11 +452,11 @@ content {
   left: 0;
   top: 0;
   width: 100vw;
-  min-height: calc( 100% - 20px );
+  min-height: calc( 100% - 35px );
   z-index: 10;
   padding: 10px;
   padding-top: 0;
-  margin-top: 20px;
+  margin-top: 35px;
   overflow-y: hidden;
   overflow-x: hidden;
   /*pointer-events: none;*/
@@ -486,7 +486,7 @@ content {
   justify-content: center;
   align-items: flex-start;
   height: 100%;
-  border-right: 1px solid darkgray;
+  border-left: 1px solid darkgray;
   font-size: 100%;
   color: darkgray;
   flex-shrink: 0;
@@ -495,14 +495,15 @@ content {
 
 .map-past-week {
   background-color: rgba(100,100,100,0.1);
-  border-right: 1px solid white;
+  border-left: 1px solid white;
   color: white;
 
 }
 
 .map-current-week {
-  background-color: rgba(100,100,100,0.1);
-  border-right: 1px solid red;
+  background-color: rgba(150,150,150,0.1);
+  /*border-right: 1px solid red;*/
+  border-left: 1px solid red;
   color: red;
 }
 
@@ -583,6 +584,10 @@ content {
 
 .mapView-linked {
   background-color: #0fc9b3;
+}
+
+.mapView-highlighted {
+  background-color: red;
 }
 
 .map-after-task {
